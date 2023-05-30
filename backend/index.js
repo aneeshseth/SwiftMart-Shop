@@ -1,7 +1,13 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
+const productRoutes = require("./Routes/productRoutes");
+const userRoutes = require("./Routes/userRoutes");
+const cookieParser = require("cookie-parser");
 
+
+app.use(cookieParser())
+app.use(express.json());
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
@@ -9,6 +15,9 @@ app.use(
   })
 );
 
-app.listen(3000, () => {
+app.use("/ecom", userRoutes);
+app.use("/ecom", productRoutes);
+
+app.listen(3600, () => {
   console.log("App listening on port!");
 });
