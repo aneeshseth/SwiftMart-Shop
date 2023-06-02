@@ -7,15 +7,6 @@ const pool = new Pool({
   port: 5432,
 });
 
-const getProducts = (request, response) => {
-  pool.query("SELECT * FROM products", (err, res) => {
-    if (err) {
-      throw err;
-    }
-    response.status(200).json(res.rows);
-  });
-};
-
 const getProductById = (request, response) => {
   const id = parseInt(request.params.id);
   pool.query("SELECT * FROM products WHERE id = $1", [id], (err, res) => {
@@ -61,7 +52,7 @@ const deleteProduct = (request, response) => {
     if (err) {
       throw err;
     }
-    res.status(200).send(`Product with id ${id} deleted`);
+    response.status(200).send(`Product with id ${id} deleted`);
   });
 };
 
@@ -70,5 +61,4 @@ module.exports = {
   updateProduct,
   createProduct,
   getProductById,
-  getProducts,
 };

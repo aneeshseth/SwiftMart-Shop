@@ -1,6 +1,7 @@
 const userController = require("../Controllers/userController");
 const express = require("express");
 const router = express.Router();
+const features = require("../Features/pagination");
 
 router.post("/createUser", userController.createUser);
 router.get("/users", userController.getUsers);
