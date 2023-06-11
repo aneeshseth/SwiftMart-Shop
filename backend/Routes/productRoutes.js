@@ -5,11 +5,26 @@ const { verify, authorizeRole } = require("../middleware/auth");
 const pagination = require("../Features/pagination");
 const filtering = require("../Features/fitering");
 
-router.get("/products", verify, pagination.getPaginatedProducts);
+router.get("/products", pagination.getPaginatedProducts);
 router.get("/products/:id", productController.getProductById);
-router.post("/createProduct", productController.createProduct);
-router.delete("/deleteProduct/:id", productController.deleteProduct);
-router.put("/updateProduct/:id", productController.updateProduct);
+router.post(
+  "/createProduct",
+  verify,
+  authorizeRole,
+  productController.createProduct
+);
+router.delete(
+  "/deleteProduct/:id",
+  verify,
+  authorizeRole,
+  productController.deleteProduct
+);
+router.put(
+  "/updateProduct/:id",
+  verify,
+  authorizeRole,
+  productController.updateProduct
+);
 
 //Filtering routes
 

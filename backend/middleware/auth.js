@@ -9,11 +9,13 @@ const pool = new Pool({
 });
 
 const verify = (req, res, next) => {
+  console.log(req.cookies);
   const token = req.cookies.token;
   if (!token || token.length < 10) {
     return res.send("Please login first!");
   }
   const decodedData = jwt.verify(token, "ANEESH");
+  req.user = decodedData;
   next();
 };
 

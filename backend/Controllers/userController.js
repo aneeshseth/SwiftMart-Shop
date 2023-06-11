@@ -20,7 +20,7 @@ const createUser = (request, response) => {
       }
       if (res.rows.length == 0) {
         pool.query(
-          "INSERT INTO users (firstname, lastname, emailid, password) VALUES ($1, $2, $3, $4) RETURNING *",
+          "INSERT INTO users (firstname, lastname, emailid, password, role) VALUES ($1, $2, $3, $4, 'user') RETURNING *",
           [firstname, lastname, emailid, bcrypt.hashSync(password)],
           (err, res) => {
             if (err) {
@@ -35,9 +35,7 @@ const createUser = (request, response) => {
                 expiresIn: new Date(Date.now() + 7 * 24 * 60 * 60 * 100),
               })
               .status(201)
-              .send(
-                `User added with ID: ${res.rows[0].id} and token: ${token}`
-              );
+              .json({ id: `${res.rows[0].id}`, token: token });
           }
         );
       } else {
@@ -72,12 +70,20 @@ const loginUser = (request, response) => {
           token = jwt.sign({ id: res.rows[0].id }, "ANEESH", {
             expiresIn: "5d",
           });
-          return response
-            .cookie("token", token, {
+          response.cookie("token", token, {
+            httpOnly: true,
+            expiresIn: new Date(Date.now() + 7 * 24 * 60 * 60 * 100),
+          });
+          console.log(
+            response.cookie("token", token, {
               httpOnly: true,
               expiresIn: new Date(Date.now() + 7 * 24 * 60 * 60 * 100),
             })
-            .send(`User with ID ${res.rows[0].id} logged in!`);
+          );
+          return response.json({
+            id: `${res.rows[0].id}`,
+            token: token,
+          });
         } else {
           return response.status(400).send("Invalid ID/Password!");
         }

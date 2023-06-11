@@ -7,9 +7,9 @@ const pool = new Pool({
   port: 5432,
 });
 
-const deleteOrder = (request, response) => {
+const cancelOrder = (request, response) => {
   const id = parseInt(request.params.id);
-  pool.query("DELETE FROM users WHERE id = $1", [id], (err, res) => {
+  pool.query("DELETE FROM USERORDERS WHERE id = $1", [id], (err, res) => {
     if (err) {
       throw err;
     }
@@ -17,4 +17,27 @@ const deleteOrder = (request, response) => {
   });
 };
 
-module.exports = { deleteOrder };
+const returnOrder = (request, response) => {
+  const id = parseInt(request.params.id);
+  pool.query(
+    "DELETE FROM USERORDERS WHERE product_id = $1",
+    [id],
+    (err, res) => {
+      if (err) {
+        throw err;
+      }
+    }
+  );
+  pool.query(
+    "INSERT INTO USERRETURNS (user_id, product_id) VALUES ($1, $2) RETURNING * ",
+    [request.user.id, id],
+    (err, res) => {
+      if (err) {
+        throw err;
+      }
+      response.status(200).json(`Product with ID ${id} added to return!`);
+    }
+  );
+};
+
+module.exports = { cancelOrder };

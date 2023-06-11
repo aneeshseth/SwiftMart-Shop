@@ -1,0 +1,54 @@
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+input {
+  padding: 10px;
+  width: 300px;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  font-size: 16px;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* CSS Animations */
+
+.input-group input:focus {
+  border-bottom-color: #007bff;
+  transition: border-color 0.5s;
+}
+
+.input-group input::placeholder {
+  color: #aaa;
+  transition: color 0.5s;
+}
+
+.input-group input:focus::placeholder {
+  color: #555;
+  transition: color 0.5s;
+}

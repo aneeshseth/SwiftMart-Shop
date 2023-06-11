@@ -18,10 +18,10 @@ const getProductById = (request, response) => {
 };
 
 const createProduct = (request, response) => {
-  const { name, category, price } = request.body;
+  const { name, category, price, isbn } = request.body;
   pool.query(
-    "INSERT INTO products (name, category, price, rating) VALUES ($1, $2, $3, $4) RETURNING *",
-    [name, category, price, 0],
+    "INSERT INTO products (name, category, price, isbn) VALUES ($1, $2, $3, $4) RETURNING *",
+    [name, category, price, isbn],
     (err, res) => {
       if (err) {
         throw err;
