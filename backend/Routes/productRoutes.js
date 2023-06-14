@@ -5,7 +5,7 @@ const { verify, authorizeRole } = require("../middleware/auth");
 const pagination = require("../Features/pagination");
 const filtering = require("../Features/fitering");
 
-router.get("/products", pagination.getPaginatedProducts);
+router.get("/products", verify, pagination.getPaginatedProducts);
 router.get("/products/:id", productController.getProductById);
 router.post(
   "/createProduct",

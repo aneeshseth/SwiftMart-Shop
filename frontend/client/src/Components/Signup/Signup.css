@@ -1,52 +1,99 @@
 .signup-container {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  margin-top: 50px;
+  min-height: 100vh;
+  background-color: black;
 }
 
 .signup-form {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
+  padding: 40px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 80%;
 }
 
-.input-group {
-  margin-bottom: 20px;
-}
-
-input {
-  padding: 10px;
-  width: 300px;
-  border: none;
-  border-bottom: 2px solid #ccc;
-  font-size: 16px;
-}
-
-button {
-  padding: 10px 20px;
-  border: none;
-  background-color: #007bff;
+.signup-heading {
+  margin-bottom: 30px;
   color: #fff;
-  font-size: 16px;
+  font-size: 24px;
+}
+.logo-container {
+  position: absolute;
+  top: 30px;
+  left: 35px;
+}
+body {
+  background-color: black;
+}
+
+.logo-image {
+  width: 170px;
+  height: 170px;
+}
+
+.signup-form input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  border: none;
+  outline: none;
+  background-color: rgba(30, 30, 30, 0.5);
+  border-radius: 10px;
+  color: #fff;
+}
+
+.signup-button {
+  padding: 12px 24px;
+  background-color: #222;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
 }
 
-button:hover {
-  background-color: #0056b3;
+.signup-button:hover {
+  background-color: #333;
 }
 
-.input-group input:focus {
-  border-bottom-color: #007bff;
-  transition: border-color 0.5s;
+.login-link {
+  margin-top: 10px;
+  color: #999;
+  font-size: 14px;
+  text-decoration: none;
 }
 
-.input-group input::placeholder {
-  color: #aaa;
-  transition: color 0.5s;
+.login-link:hover {
+  text-decoration: underline;
 }
 
-.input-group input:focus::placeholder {
-  color: #555;
-  transition: color 0.5s;
+/* Responsive Styles */
+
+@media screen and (max-width: 480px) {
+  .signup-form {
+    padding: 20px;
+  }
+
+  .signup-form input {
+    width: 80%;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .signup-form {
+    padding: 10px;
+  }
+
+  .signup-form input {
+    width: 100%;
+  }
 }

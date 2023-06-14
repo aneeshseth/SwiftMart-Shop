@@ -35,7 +35,7 @@ const createUser = (request, response) => {
                 expiresIn: new Date(Date.now() + 7 * 24 * 60 * 60 * 100),
               })
               .status(201)
-              .json({ id: `${res.rows[0].id}`, token: token });
+              .json({ id: `${res.rows[0].id}` });
           }
         );
       } else {
@@ -74,12 +74,6 @@ const loginUser = (request, response) => {
             httpOnly: true,
             expiresIn: new Date(Date.now() + 7 * 24 * 60 * 60 * 100),
           });
-          console.log(
-            response.cookie("token", token, {
-              httpOnly: true,
-              expiresIn: new Date(Date.now() + 7 * 24 * 60 * 60 * 100),
-            })
-          );
           return response.json({
             id: `${res.rows[0].id}`,
             token: token,

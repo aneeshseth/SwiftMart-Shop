@@ -8,20 +8,14 @@ const pool = new Pool({
 });
 
 const getPaginatedProducts = (request, response) => {
-  const { limit, page } = request.query;
-  pool.query(
-    "SELECT * FROM products ORDER BY id LIMIT $1 OFFSET $2",
-    [
-      limit,
-      page * limit, //We start from the 0th page
-    ],
-    (err, res) => {
-      if (err) {
-        throw err;
-      }
-      response.status(200).json(res.rows);
+  pool.query("SELECT * FROM products", (err, res) => {
+    if (err) {
+      return res.status(400).json({
+        message: ";pl",
+      });
     }
-  );
+    return response.send(res.rows);
+  });
 };
 
 module.exports = { getPaginatedProducts };

@@ -9,14 +9,26 @@ const pool = new Pool({
 });
 
 const verify = (req, res, next) => {
-  console.log(req.cookies);
-  const token = req.cookies.token;
-  if (!token || token.length < 10) {
-    return res.send("Please login first!");
+  try {
+    const cookies = req.headers.cookie;
+    const token = cookies.split("=")[1];
+    if (!token) {
+      return res.json({
+        message: "No token",
+      });
+    }
+    jwt.verify(token, "ANEESH", (err, res) => {
+      if (err) {
+        return res.status(400).json({ message: err });
+      }
+      req.user = res;
+      next();
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: err,
+    });
   }
-  const decodedData = jwt.verify(token, "ANEESH");
-  req.user = decodedData;
-  next();
 };
 
 const authorizeRole = (req, res, next) => {
@@ -39,3 +51,20 @@ const authorizeRole = (req, res, next) => {
 };
 
 module.exports = { verify, authorizeRole };
+
+/*
+
+login 
+signup
+products displayed, each product multiple images, reviews, ratings
+navbar - web name, sort, filter, cart, profile (update profile, update password), about - (about this project), cart, myorders (orderid, status), myreturns
+pagination
+checkout -
+
+/admin
+
+display all products (add, delete, update, show stock)
+orders (all orders from users, changing order statuses, stock - 1 when order completed)
+users (all users and their details and ability to update each ones)
+
+*/

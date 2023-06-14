@@ -7,13 +7,11 @@ import Product from "./Components/Products/Product";
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route exact path="/Signup" Component={Signup}></Route>
-          <Route exact path="/Login" Component={Login}></Route>
-          <Route exact path="/products" Component={Product} />
-        </Routes>
-      </BrowserRouter>
+      <Routes>
+        <Route exact path="/" Component={Signup}></Route>
+        <Route exact path="/Login" Component={Login}></Route>
+        <Route exact path="/products" Component={Product} />
+      </Routes>
     </div>
   );
 }
