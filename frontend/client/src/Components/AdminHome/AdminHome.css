@@ -1,0 +1,49 @@
+.admin-home {
+  margin: 0 auto;
+  padding: 20px;
+  max-width: 800px;
+  color: white;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+.button {
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  border-style: solid;
+  padding: 8px;
+}
+th,
+td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  border-right: 1px solid #ddd; /* Add column lines */
+}
+
+th:last-child,
+td:last-child {
+  border-right: none; /* Remove column line for the last column */
+}
+
+@media screen and (max-width: 768px) {
+  th,
+  td {
+    font-size: 14px;
+    padding: 8px;
+    border-right: 1px solid #ddd; /* Add column lines */
+  }
+
+  th:last-child,
+  td:last-child {
+    border-right: none; /* Remove column line for the last column */
+  }
+}

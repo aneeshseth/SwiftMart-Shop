@@ -8,9 +8,9 @@ const pool = new Pool({
 });
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-
-const createUser = (request, response) => {
-  const { firstname, lastname, emailid, password } = request.body;
+const createUser = async (request, response) => {
+  const { firstname, lastname, emailid, password, retypePass, imageUrl } =
+    request.body;
   pool.query(
     "SELECT * FROM users WHERE emailid = $1",
     [emailid],
@@ -19,16 +19,20 @@ const createUser = (request, response) => {
         throw err;
       }
       if (res.rows.length == 0) {
+        if (password != retypePass) {
+          return response.status(400).send("Passwords dont match!");
+        }
         pool.query(
-          "INSERT INTO users (firstname, lastname, emailid, password, role) VALUES ($1, $2, $3, $4, 'user') RETURNING *",
-          [firstname, lastname, emailid, bcrypt.hashSync(password)],
+          "INSERT INTO users (firstname, lastname, emailid, password, role, profilepic) VALUES ($1, $2, $3, $4, 'user', $5) RETURNING *",
+          [firstname, lastname, emailid, bcrypt.hashSync(password), imageUrl],
           (err, res) => {
             if (err) {
               throw err;
             }
             const token = jwt.sign({ id: res.rows[0].id }, "ANEESH", {
-              expiresIn: "5d",
+              expiresIn: "3hr",
             });
+            console.log(res.rows);
             response
               .cookie("token", token, {
                 httpOnly: true,
@@ -55,7 +59,6 @@ const getUsers = (request, response) => {
 };
 
 const loginUser = (request, response) => {
-  let token;
   const { emailid, password } = request.body;
   pool.query(
     "SELECT * FROM users WHERE emailid = $1",
@@ -68,7 +71,7 @@ const loginUser = (request, response) => {
         const comparePass = bcrypt.compareSync(password, res.rows[0].password);
         if (comparePass) {
           token = jwt.sign({ id: res.rows[0].id }, "ANEESH", {
-            expiresIn: "5d",
+            expiresIn: "3hr",
           });
           response.cookie("token", token, {
             httpOnly: true,
@@ -86,6 +89,18 @@ const loginUser = (request, response) => {
       }
     }
   );
+};
+
+const getRole = (request, response) => {
+  const id = parseInt(request.params.id);
+  console.log(id);
+  pool.query("SELECT * FROM USERS WHERE ID = $1", [id], (err, res) => {
+    if (err) {
+      throw err;
+    }
+    console.log(res.rows[0]);
+    return response.status(200).json(res.rows[0].role);
+  });
 };
 
 const logoutUser = (request, response) => {
@@ -108,10 +123,10 @@ const getUserDetails = (request, response) => {
 
 const updateUser = (request, response) => {
   const id = parseInt(request.params.id);
-  const { firstname, lastname, emailid } = request.body;
+  const { firstname, lastname, emailid, imageUrl } = request.body;
   pool.query(
-    "UPDATE products SET firstname = $1, lastname = $2, emailid = $3 WHERE id = $4",
-    [firstname, lastname, emailid, id],
+    "UPDATE users SET firstname = $1, lastname = $2, emailid = $3, profilepic = $4 WHERE id = $5",
+    [firstname, lastname, emailid, imageUrl, id],
     (err, res) => {
       if (err) {
         throw err;
@@ -119,6 +134,26 @@ const updateUser = (request, response) => {
       response.status(200).send(`User updated with ID: ${id}`);
     }
   );
+};
+
+const updatePassword = (request, response) => {
+  const id = parseInt(request.params.id);
+  const { oldPassword, newPassword, confirmNew } = request.body;
+  pool.query("SELECT * FROM USERS WHERE id = $1", [id], (err, res) => {
+    if (err) {
+      throw err;
+    }
+    const compare = bcrypt.compareSync(oldPassword, res.rows[0].password);
+    if (compare && newPassword == confirmNew) {
+      pool.query("UPDATE USERS SET password = $1 WHERE ID = $2", [
+        bcrypt.hashSync(newPassword),
+        id,
+      ]);
+      return response.send(res.rows[0]);
+    } else {
+      return response.status(400).send("An Error Occured");
+    }
+  });
 };
 
 const deleteUser = (request, response) => {
@@ -139,4 +174,6 @@ module.exports = {
   logoutUser,
   getUserDetails,
   deleteUser,
+  updatePassword,
+  getRole,
 };

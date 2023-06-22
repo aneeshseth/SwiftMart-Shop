@@ -6,7 +6,8 @@ const pagination = require("../Features/pagination");
 const filtering = require("../Features/fitering");
 
 router.get("/products", verify, pagination.getPaginatedProducts);
-router.get("/products/:id", productController.getProductById);
+router.get("/products/range", verify, pagination.sliderProducts);
+router.get("/products/:id", productController.getProductByName);
 router.post(
   "/createProduct",
   verify,
@@ -25,14 +26,12 @@ router.put(
   authorizeRole,
   productController.updateProduct
 );
+router.get("/product/:id", verify, productController.getProductById);
 
 //Filtering routes
 
-router.get("/filter/a-z/ASC", filtering.filteringByAlphabetASC);
-router.get("/filter/z-a/DESC", filtering.filteringByAlphabetDESC);
 router.get("/filter/low", filtering.filteringByPriceASC);
 router.get("/filter/high", filtering.filteringByPriceDESC);
-router.get("/filter/price", filtering.filteringBySpecificPrice);
 router.get("/filter/rating/ASC", filtering.filteringByRatingASC);
 router.get("/filter/rating/DESC", filtering.filteringByRatingDESC);
 router.get("/filter/specific", filtering.filteringByCategory);

@@ -47,22 +47,6 @@ const filteringByPriceDESC = (request, response) => {
   });
 };
 
-//Filtering by specific prices
-
-const filteringBySpecificPrice = (request, response) => {
-  const { low, high } = request.query;
-  pool.query(
-    "SELECT * FROM products WHERE price BETWEEN $1 AND $2",
-    [parseInt(low), parseInt(high)],
-    (err, res) => {
-      if (err) {
-        throw err;
-      }
-      response.status(200).json(res.rows);
-    }
-  );
-};
-
 //Filtering by rating
 
 const filteringByRatingASC = (request, response) => {
@@ -107,5 +91,4 @@ module.exports = {
   filteringByPriceDESC,
   filteringByRatingASC,
   filteringByRatingDESC,
-  filteringBySpecificPrice,
 };
