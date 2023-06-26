@@ -7,8 +7,6 @@ const pool = new Pool({
   port: 5432,
 });
 
-//Filtering by alphabets
-
 const filteringByAlphabetASC = (request, response) => {
   pool.query("SELECT * FROM products ORDER BY name", (err, res) => {
     if (err) {

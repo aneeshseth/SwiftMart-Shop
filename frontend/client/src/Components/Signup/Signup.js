@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Signup.css";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { CountrySelect, StateSelect } from "react-country-state-city";
 
 function Signup() {
   const [firstName, setFirstName] = useState("");
@@ -13,10 +14,16 @@ function Signup() {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [res, setRes] = useState({});
-  const [imageUrls, setImageUrls] = useState([]);
+  const [imageUrls, setImageUrls] = useState("");
+  const [countryid, setCountryid] = useState(0);
+  const [stateid, setstateid] = useState(0);
+  const [country, setCountry] = useState("");
+  const [state, setState] = useState("");
+  const [street, setStreet] = useState("");
   const handleSelectFile = (e) => setFile(e.target.files[0]);
 
   const navigate = useNavigate();
+
   const handleUpload = async () => {
     try {
       setLoading(true);
@@ -27,7 +34,9 @@ function Signup() {
       if (allowedFormats.includes(fileType)) {
         const response = await axios.post("http://localhost:3600/upload", data);
         setRes(response.data);
-        setImageUrls((prevImageUrls) => [...prevImageUrls, response.data.url]);
+        console.log(response.data);
+        setImageUrls(response.data.url);
+        console.log(imageUrls);
       } else {
         alert("Please select a PNG, JPG, or JPEG file.");
       }
@@ -46,13 +55,14 @@ function Signup() {
         emailid: emailid,
         password: password,
         retypePass: retypePass,
-        imageUrl: imageUrls[0],
+        imageUrl: imageUrls,
+        country: country,
+        state: state,
+        street: street,
       });
       const data = res.data;
       return data;
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
   const successToast = () => {
     alert("Account created!");
@@ -60,15 +70,28 @@ function Signup() {
 
   const handleSubmit = async () => {
     try {
-      signUp()
-        .then((data) => {
-          navigate(`/products/${data.id}`);
-          successToast();
-        })
-        .catch(() => {
-          alert("Invalid/Please enter all the fields correctly!");
-          navigate("/");
-        });
+      if (
+        firstName === "" ||
+        lastName === "" ||
+        emailid === "" ||
+        password === "" ||
+        retypePass === "" ||
+        country === "" ||
+        state === "" ||
+        street === ""
+      ) {
+        alert("Please Enter All Values!");
+      } else {
+        signUp()
+          .then((data) => {
+            navigate(`/products/${data.id}`);
+            successToast();
+          })
+          .catch(() => {
+            alert("Invalid/Please enter all the fields correctly!");
+            navigate("/");
+          });
+      }
     } catch (error) {
       navigate("/");
     }
@@ -85,8 +108,9 @@ function Signup() {
     return (
       <div className="spinner-container">
         <img
-          src="https://media0.giphy.com/media/uGonwW6vqUTI15DKmj/giphy.gif?cid=6c09b952ccb7b2b1e773c3ed04c9cd8d14194335b49b6877&ep=v1_internal_gifs_gifId&rid=giphy.gif&ct=s"
+          src="https://smhfoundation.ca/wp-content/plugins/interactive-3d-flipbook-powered-physics-engine/assets/images/dark-loader.gif"
           className="spinner"
+          alt=""
         />
       </div>
     );
@@ -94,20 +118,22 @@ function Signup() {
 
   return (
     <div className="signup-container">
-      <div className="logo-container">
+      <a
+        href="https://github.com/aneeshseth/project1"
+        className="logo-container"
+      >
         <img
-          src="https://www.freeiconspng.com/uploads/white-tiger-png-23.png"
-          alt="Logo"
+          src="https://cdn-icons-png.flaticon.com/512/25/25231.png"
+          alt="Example Logo"
           className="logo-image"
         />
-      </div>
+      </a>
       <div className="signup-form">
-        <h2 className="signup-heading">Sign Up</h2>
+        <h2 className="signup-heading">Sign up</h2>
         <input
           type="text"
           name="firstName"
           placeholder="First Name"
-          required
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
         />
@@ -115,7 +141,6 @@ function Signup() {
           type="text"
           name="lastName"
           placeholder="Last Name"
-          required
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
         />
@@ -123,7 +148,6 @@ function Signup() {
           type="email"
           name="email"
           placeholder="Email ID"
-          required
           value={emailid}
           onChange={(e) => setEmailId(e.target.value)}
         />
@@ -132,19 +156,39 @@ function Signup() {
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          required
         />
         <input
           type="password"
           placeholder="Re enter Password"
           value={retypePass}
           onChange={(e) => setRetypePass(e.target.value)}
-          required
+        />
+        <div className="select-select">
+          <div className="select-div">
+            <CountrySelect
+              onChange={(e) => {
+                setCountryid(e.id);
+                setCountry(e.name);
+              }}
+              placeHolder="Select Country"
+            />
+            <StateSelect
+              countryid={countryid}
+              onChange={(e) => {
+                setstateid(e);
+                setState(e.name);
+              }}
+              placeHolder="Select State"
+            />
+          </div>
+        </div>
+        <input
+          placeholder="Street Address"
+          value={street}
+          onChange={(e) => setStreet(e.target.value)}
         />
         <div className="App">
-          <label htmlFor="file" className="btn-grey">
-            select file
-          </label>
+          <h5>Select Profile Picture below:</h5>
           {file && <center>{file.name}</center>}
           <input
             id="file"
@@ -152,14 +196,13 @@ function Signup() {
             onChange={handleSelectFile}
             multiple={false}
           />
-
           {file && (
             <div className="button-container">
               <button onClick={handleUpload} className="btn-green">
                 {loading ? "Uploading" : "Set Profile Picture"}
               </button>
               <div className="done">
-                {imageUrls.length > 0 ? "Done!" : "No image uploaded"}
+                {imageUrls === "" ? "No image uploaded" : "Done!"}
               </div>
             </div>
           )}

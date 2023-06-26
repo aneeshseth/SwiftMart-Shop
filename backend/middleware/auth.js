@@ -10,8 +10,15 @@ const pool = new Pool({
 
 const verify = (req, res, next) => {
   try {
-    const cookies = req.headers.cookie;
-    const token = cookies.split("=")[1];
+    const cookieString = req.headers.cookie;
+    const cookies = cookieString.split("; ");
+    let token = null;
+    for (const cookie of cookies) {
+      if (cookie.startsWith("token=")) {
+        token = cookie.split("=")[1];
+        break;
+      }
+    }
     if (!token) {
       return res.json({
         message: "No token",

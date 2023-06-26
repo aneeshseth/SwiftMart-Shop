@@ -8,12 +8,28 @@ const pool = new Pool({
 });
 
 const getPaginatedProducts = (request, response) => {
-  pool.query("SELECT * FROM products", (err, res) => {
-    if (err) {
-      throw err;
-    }
-    return response.send(res.rows);
-  });
+  const { search } = request.body;
+  if (search == "") {
+    pool.query("SELECT * FROM products", (err, res) => {
+      if (err) {
+        throw err;
+      }
+      return response.send(res.rows);
+    });
+  } else {
+    const searchTerms = search.split(" ").filter((term) => term.trim() !== "");
+    const tsQuery = searchTerms.map((term) => term + ":*").join(" & ");
+    pool.query(
+      "SELECT * FROM PRODUCTS WHERE to_tsvector('simple', name) @@ to_tsquery('simple', $1) UNION SELECT * FROM PRODUCTS WHERE to_tsvector('simple', category) @@ to_tsquery('simple', $1)",
+      [tsQuery],
+      (err, res) => {
+        if (err) {
+          throw err;
+        }
+        return response.send(res.rows);
+      }
+    );
+  }
 };
 
 const sliderProducts = (request, response) => {

@@ -39,11 +39,11 @@ td:last-child {
   td {
     font-size: 14px;
     padding: 8px;
-    border-right: 1px solid #ddd; /* Add column lines */
+    border-right: 1px solid #ddd;
   }
 
   th:last-child,
   td:last-child {
-    border-right: none; /* Remove column line for the last column */
+    border-right: none;
   }
 }

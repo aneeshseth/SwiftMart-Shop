@@ -1,0 +1,74 @@
+.container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin: 0 20px;
+  min-height: 100vh;
+  align-items: center;
+  background-color: black;
+}
+
+.logout-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 20px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+@keyframes floatAnimation {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.circle-button {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.circle {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  position: relative;
+  animation: floatAnimation 5s ease-in-out infinite;
+  margin: 20px;
+}
+
+@media screen and (max-width: 768px) {
+  .circle {
+    width: 200px;
+    height: 200px;
+    font-size: 18px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .circle {
+    width: 150px;
+    height: 150px;
+    font-size: 16px;
+  }
+}

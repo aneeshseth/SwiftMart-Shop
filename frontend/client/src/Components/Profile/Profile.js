@@ -10,12 +10,11 @@ function Profile() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [emailid, setEmailId] = useState("");
-  const [isFormChanged, setIsFormChanged] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [res, setRes] = useState({});
-  const [imageUrls, setImageUrls] = useState([]);
+  const [imageUrl, setImageUrl] = useState("");
   const handleSelectFile = (e) => setFile(e.target.files[0]);
   const handleUpload = async () => {
     try {
@@ -27,7 +26,7 @@ function Profile() {
       if (allowedFormats.includes(fileType)) {
         const response = await axios.post("http://localhost:3600/upload", data);
         setRes(response.data);
-        setImageUrls((prevImageUrls) => [...prevImageUrls, response.data.url]);
+        setImageUrl(response.data.url);
       } else {
         alert("Please select a PNG, JPG, or JPEG file.");
       }
@@ -38,13 +37,21 @@ function Profile() {
     }
   };
 
+  const formChange = () => {
+    if (firstName == "" && lastName == "" && emailid == "" && imageUrl == "") {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const handleSave = async () => {
     const res = axios
       .put(`http://localhost:3600/ecom/updateUser/${id}`, {
         firstname: firstName === "" ? user.firstname : firstName,
         lastname: lastName === "" ? user.lastname : lastName,
         emailid: emailid === "" ? user.emailid : lastName,
-        imageUrl: imageUrls[0] === [] ? imageUrls[0] : user.profilepic,
+        imageUrl: imageUrl === "" ? user.profilepic : imageUrl,
       })
       .then(() => {
         navigate(`/products/${id}`);
@@ -76,7 +83,7 @@ function Profile() {
           value={firstName}
           onChange={(e) => {
             setFirstName(e.target.value);
-            setIsFormChanged(true);
+            formChange();
           }}
         ></input>
         <input
@@ -85,7 +92,7 @@ function Profile() {
           value={lastName}
           onChange={(e) => {
             setLastName(e.target.value);
-            setIsFormChanged(true);
+            formChange();
           }}
         ></input>
         <input
@@ -94,7 +101,7 @@ function Profile() {
           value={emailid}
           onChange={(e) => {
             setEmailId(e.target.value);
-            setIsFormChanged(true);
+            formChange();
           }}
         ></input>
         <div className="App">
@@ -115,7 +122,7 @@ function Profile() {
                 {loading ? "Uploading" : "Set Profile Picture"}
               </button>
               <div className="done">
-                {imageUrls.length > 0 ? "Done!" : "No image uploaded"}
+                {imageUrl == "" ? "No image uploaded" : "Done!"}
               </div>
             </div>
           )}
@@ -124,10 +131,15 @@ function Profile() {
           onClick={() => {
             navigate(`/pass/${id}`);
           }}
+          className="update-password-button"
         >
-          Update password
+          Update Password
         </button>
-        <button onClick={handleSave} disabled={!isFormChanged}>
+        <button
+          onClick={handleSave}
+          disabled={formChange()}
+          className="save-button"
+        >
           Save
         </button>
       </>

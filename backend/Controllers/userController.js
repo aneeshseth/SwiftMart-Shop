@@ -9,8 +9,17 @@ const pool = new Pool({
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const createUser = async (request, response) => {
-  const { firstname, lastname, emailid, password, retypePass, imageUrl } =
-    request.body;
+  const {
+    firstname,
+    lastname,
+    emailid,
+    password,
+    retypePass,
+    imageUrl,
+    country,
+    state,
+    street,
+  } = request.body;
   pool.query(
     "SELECT * FROM users WHERE emailid = $1",
     [emailid],
@@ -24,15 +33,24 @@ const createUser = async (request, response) => {
         }
         pool.query(
           "INSERT INTO users (firstname, lastname, emailid, password, role, profilepic) VALUES ($1, $2, $3, $4, 'user', $5) RETURNING *",
-          [firstname, lastname, emailid, bcrypt.hashSync(password), imageUrl],
+          [
+            firstname.toLowerCase(),
+            lastname.toLowerCase(),
+            emailid.toLowerCase(),
+            bcrypt.hashSync(password),
+            imageUrl,
+          ],
           (err, res) => {
             if (err) {
               throw err;
             }
+            pool.query(
+              "INSERT INTO ADDRESS (USER_ID, STREET, STATE, COUNTRY) VALUES ($1, $2, $3, $4)",
+              [res.rows[0].id, street, state, country]
+            );
             const token = jwt.sign({ id: res.rows[0].id }, "ANEESH", {
               expiresIn: "3hr",
             });
-            console.log(res.rows);
             response
               .cookie("token", token, {
                 httpOnly: true,
@@ -62,7 +80,7 @@ const loginUser = (request, response) => {
   const { emailid, password } = request.body;
   pool.query(
     "SELECT * FROM users WHERE emailid = $1",
-    [emailid],
+    [emailid.toLowerCase()],
     (err, res) => {
       if (err) {
         throw err;
@@ -93,9 +111,9 @@ const loginUser = (request, response) => {
 
 const getRole = (request, response) => {
   const id = parseInt(request.params.id);
-  console.log(id);
   pool.query("SELECT * FROM USERS WHERE ID = $1", [id], (err, res) => {
     if (err) {
+      console.log("error has happened");
       throw err;
     }
     console.log(res.rows[0]);
@@ -121,6 +139,18 @@ const getUserDetails = (request, response) => {
   });
 };
 
+const getLoggedInUser = (request, response) => {
+  pool.query(
+    "SELECT * FROM USERS WHERE ID = $1",
+    [request.user.id],
+    (err, res) => {
+      if (err) {
+        throw err;
+      }
+      return response.send(res.rows[0]);
+    }
+  );
+};
 const updateUser = (request, response) => {
   const id = parseInt(request.params.id);
   const { firstname, lastname, emailid, imageUrl } = request.body;
@@ -134,6 +164,59 @@ const updateUser = (request, response) => {
       response.status(200).send(`User updated with ID: ${id}`);
     }
   );
+};
+
+const updateUserAdminSide = (request, response) => {
+  const id = parseInt(request.params.id);
+  const { firstname, lastname, emailid, role, street, country, state } =
+    request.body;
+  pool.query(
+    "UPDATE users SET firstname = $1, lastname = $2, emailid = $3, role=$4 WHERE id = $5",
+    [firstname, lastname, emailid, role, id],
+    (err, res) => {
+      if (err) {
+        throw err;
+      }
+      pool.query(
+        "UPDATE ADDRESS SET STREET = $1, COUNTRY = $2, STATE = $3 WHERE USER_ID = $4",
+        [street, country, state, id],
+        (err, res) => {
+          if (err) {
+            throw err;
+          }
+        }
+      );
+      response.status(200).send(`User updated with ID: ${id}`);
+    }
+  );
+};
+
+const getAddress = (request, response) => {
+  const id = parseInt(request.params.id);
+  pool.query("SELECT * FROM ADDRESS WHERE USER_ID = $1", [id], (err, res) => {
+    if (err) {
+      throw err;
+    }
+    return response.send(res.rows);
+  });
+};
+
+const getOnlyUsers = (request, response) => {
+  pool.query("SELECT * FROM USERS WHERE ROLE = 'user'", (err, res) => {
+    if (err) {
+      throw err;
+    }
+    return response.send(res.rows);
+  });
+};
+
+const getOnlyAdmins = (request, response) => {
+  pool.query("SELECT * FROM USERS WHERE ROLE = 'admin' ", (err, res) => {
+    if (err) {
+      throw err;
+    }
+    return response.send(res.rows);
+  });
 };
 
 const updatePassword = (request, response) => {
@@ -176,4 +259,9 @@ module.exports = {
   deleteUser,
   updatePassword,
   getRole,
+  getAddress,
+  updateUserAdminSide,
+  getOnlyAdmins,
+  getLoggedInUser,
+  getOnlyUsers,
 };

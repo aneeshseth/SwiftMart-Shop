@@ -26,40 +26,49 @@ const getProductById = (request, response) => {
     if (err) {
       throw err;
     }
-    response.status(200).json(res.rows);
+    response.status(200).json(res.rows[0]);
   });
 };
 
 const createProduct = (request, response) => {
-  const { name, category, price, isbn } = request.body;
-  pool.query(
-    "INSERT INTO products (name, category, price, isbn) VALUES ($1, $2, $3, $4) RETURNING *",
-    [name, category, price, isbn],
-    async (err, res) => {
-      if (err) {
-        throw err;
-      }
-      const Product = await stripe.products.create({
-        name: name,
-      });
-      const Price = await stripe.prices.create({
-        unit_amount: price,
-        currency: "AED",
-        recurring: { interval: "year" },
-        product: Product.id,
-      });
+  const { name, category, price, isbn, images } = request.body;
+  pool.query("SELECT * FROM PRODUCTS WHERE ISBN = $1", [isbn], (err, res) => {
+    if (err) {
+      throw err;
+    }
+    if (res.rowCount != 0) {
+      return response.send("ISBN not unique!");
+    } else {
       pool.query(
-        "UPDATE PRODUCTS SET price_id = $1 WHERE NAME=$2",
-        [Price.id, name],
-        (err, res) => {
+        "INSERT INTO products (name, category, price, isbn, images) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+        [name, category, price, isbn, images],
+        async (err, res) => {
+          console.log(price);
           if (err) {
             throw err;
           }
-          response.status(201).send(`Product added!`);
+          const Product = await stripe.products.create({
+            name: name,
+          });
+          const Price = await stripe.prices.create({
+            unit_amount: price * 100,
+            currency: "USD",
+            product: Product.id,
+          });
+          pool.query(
+            "UPDATE PRODUCTS SET price_id = $1 WHERE NAME=$2",
+            [Price.id, name],
+            (err, res) => {
+              if (err) {
+                throw err;
+              }
+              response.status(201).send(`Product added!`);
+            }
+          );
         }
       );
     }
-  );
+  });
 };
 
 const updateProduct = (request, response) => {

@@ -9,7 +9,7 @@ const pool = new Pool({
 
 const getCartItems = (request, response) => {
   pool.query(
-    "SELECT * FROM USERCART WHERE USER_ID = $1",
+    "SELECT * FROM USERCART WHERE USER_ID = $1 ORDER BY PRODUCT_ID",
     [request.user.id],
     (err, res) => {
       if (err) {
@@ -18,6 +18,37 @@ const getCartItems = (request, response) => {
       response.status(200).json(res.rows);
     }
   );
+};
+
+const getShippingAddress = (request, response) => {
+  pool.query(
+    "SELECT * FROM ADDRESS WHERE USER_ID = $1",
+    [request.user.id],
+    (err, res) => {
+      if (err) {
+        throw err;
+      }
+      return response.send(res.rows);
+    }
+  );
+};
+
+const getImageForCart = (request, response) => {
+  const { name } = request.body;
+  let arr = [];
+  name.map((product) => {
+    pool.query(
+      "SELECT * FROM PRODUCTS WHERE NAME = $1",
+      [product],
+      (err, res) => {
+        if (err) {
+          throw err;
+        }
+        arr = [...arr, res.rows[0].images[0]];
+      }
+    );
+  });
+  return response.send(arr);
 };
 
 const addToCart = (request, response) => {
@@ -58,18 +89,36 @@ const addToCart = (request, response) => {
   );
 };
 
-const deleteFromCart = (request, response) => {
-  const { user_id, product_id } = request.body;
+const updateQuanity = (request, response) => {
+  const { newQuantity } = request.body;
+  const id = request.params.id;
   pool.query(
-    "DELETE FROM USERCART WHERE USER_ID = $1 AND PRODUCT_ID = $2",
-    [user_id, product_id],
+    "UPDATE USERCART SET QUANTITY = $1 WHERE PRODUCT_ID = $2",
+    [newQuantity, id],
     (err, res) => {
       if (err) {
         throw err;
       }
-      return response.status(200).send("Product deleted from cart!");
+      return response.status(200).send("Updated!");
     }
   );
 };
 
-module.exports = { getCartItems, addToCart, deleteFromCart };
+const deleteFromCart = (request, response) => {
+  const id = request.params.id;
+  pool.query("DELETE FROM USERCART WHERE PRODUCT_ID = $1", [id], (err, res) => {
+    if (err) {
+      throw err;
+    }
+    return response.status(200).send("Product deleted from cart!");
+  });
+};
+
+module.exports = {
+  getCartItems,
+  addToCart,
+  updateQuanity,
+  deleteFromCart,
+  getImageForCart,
+  getShippingAddress,
+};

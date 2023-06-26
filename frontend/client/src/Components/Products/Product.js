@@ -12,89 +12,12 @@ function Product() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState();
-
-  const RangeSlider = ({ min, max, value, step, onChange }) => {
-    const [minValue, setMinValue] = useState(value ? value.min : min);
-    const [maxValue, setMaxValue] = useState(value ? value.max : max);
-
-    useEffect(() => {
-      if (value) {
-        setMinValue(value.min);
-        setMaxValue(value.max);
-      }
-    }, [value]);
-
-    const handleMinChange = (e) => {
-      e.preventDefault();
-      const newMinVal = Math.min(+e.target.value, maxValue - step);
-      if (!value) setMinValue(newMinVal);
-      onChange({ min: newMinVal, max: maxValue });
-    };
-
-    const handleMaxChange = (e) => {
-      e.preventDefault();
-      const newMaxVal = Math.max(+e.target.value, minValue + step);
-      if (!value) setMaxValue(newMaxVal);
-      onChange({ min: minValue, max: newMaxVal });
-    };
-
-    const minPos = ((minValue - min) / (max - min)) * 100;
-    const maxPos = ((maxValue - min) / (max - min)) * 100;
-
-    return (
-      <div className="wrapper">
-        <div className="input-wrapper">
-          <input
-            className="input"
-            type="range"
-            value={minValue}
-            min={min}
-            max={max}
-            step={step}
-            onChange={handleMinChange}
-          />
-          <input
-            className="input"
-            type="range"
-            value={maxValue}
-            min={min}
-            max={max}
-            step={step}
-            onChange={handleMaxChange}
-          />
-        </div>
-
-        <div className="control-wrapper">
-          <div className="control" style={{ left: `${minPos}%` }} />
-          <div className="rail">
-            <div
-              className="inner-rail"
-              style={{ left: `${minPos}%`, right: `${100 - maxPos}%` }}
-            />
-          </div>
-          <div className="control" style={{ left: `${maxPos}%` }} />
-        </div>
-      </div>
-    );
-  };
-  const minimumValue = 0;
-  const maximumValue = 500;
-  const [value, setValue] = useState({ min: 0, max: 500 });
-
-  const getProducts = async () => {
-    const res = await axios.get("http://localhost:3600/ecom/products/range", {
-      params: {
-        low: value.min,
-        high: value.max,
-      },
-    });
-    const data = await res.data;
-    console.log(data);
-    setProducts(data);
-  };
+  const [message, setMessage] = useState("");
+  const [search, setSearch] = useState("");
 
   const handleVerify = async () => {
-    const res = await axios.get("http://localhost:3600/ecom/products", {
+    const res = await axios.post("http://localhost:3600/ecom/products", {
+      search: search,
       withCredentials: true,
     });
     const data = await res.data;
@@ -102,36 +25,29 @@ function Product() {
   };
 
   const noFilters = async () => {
-    value.min = minimumValue;
-    value.max = maximumValue;
     navigate({
       search: "",
     });
-    const res = await axios.get("http://localhost:3600/ecom/products");
+    const res = await axios.post("http://localhost:3600/ecom/products", {
+      search: search,
+    });
     const data = await res.data;
     setProducts(data);
   };
 
   const ascP = async () => {
-    value.min = minimumValue;
-    value.max = maximumValue;
     const res = await axios.get("http://localhost:3600/ecom/filter/low");
     const data = await res.data;
-    console.log(data);
     setProducts(data);
   };
 
   const descP = async () => {
-    value.min = minimumValue;
-    value.max = maximumValue;
     const res = await axios.get("http://localhost:3600/ecom/filter/high");
     const data = await res.data;
     setProducts(data);
   };
 
   const Footwear = async () => {
-    value.min = minimumValue;
-    value.max = maximumValue;
     navigate({
       search: "?category=Footwear",
     });
@@ -143,8 +59,6 @@ function Product() {
   };
 
   const Shirts = async () => {
-    value.min = minimumValue;
-    value.max = maximumValue;
     navigate({
       search: "?category=Shirts",
     });
@@ -156,8 +70,6 @@ function Product() {
   };
 
   const Formals = async () => {
-    value.min = minimumValue;
-    value.max = maximumValue;
     navigate({
       search: "?category=Footwear",
     });
@@ -174,10 +86,22 @@ function Product() {
     return data;
   };
 
+  const createOrder = async () => {
+    const res = await axios.get(`http://localhost:3600/ecom/orderCreate/${id}`);
+    const data = await res.data;
+    return data;
+  };
+
   useEffect(() => {
-    handleVerify().catch(() => {
-      Logout();
-    });
+    const query = new URLSearchParams(window.location.search);
+    if (query.get("success")) {
+      createOrder().then(() => {
+        console.log("hi");
+        setMessage("Order placed!");
+        alert(message);
+        navigate(`/products/${id}`);
+      });
+    }
     getUser()
       .then((data) => {
         if (data.id == null) {
@@ -194,12 +118,12 @@ function Product() {
     return () => clearTimeout(timer);
   }, []);
   useEffect(() => {
-    if (value.min !== minimumValue || value.max !== maximumValue) {
-      getProducts();
-    } else {
-      handleVerify();
-    }
-  }, [value]);
+    noFilters();
+    handleVerify().catch(() => {
+      Logout();
+    });
+  }, [search]);
+
   const Logout = async () => {
     const res = axios
       .get("http://localhost:3600/ecom/logoutUser")
@@ -210,35 +134,66 @@ function Product() {
         navigate("/login");
       });
   };
+
   const handleProfile = () => {
     navigate(`/profile/${id}`);
   };
+
   if (isLoading) {
     return (
       <div className="spinner-container">
         <img
-          src="https://media0.giphy.com/media/uGonwW6vqUTI15DKmj/giphy.gif?cid=6c09b952ccb7b2b1e773c3ed04c9cd8d14194335b49b6877&ep=v1_internal_gifs_gifId&rid=giphy.gif&ct=s"
+          src="https://smhfoundation.ca/wp-content/plugins/interactive-3d-flipbook-powered-physics-engine/assets/images/dark-loader.gif"
           className="spinner"
         />
       </div>
     );
   }
+
   return (
-    <div className="products_page">
-      <div className="profile-button-container">
-        <button className="profile-button" onClick={handleProfile}>
-          <img
-            src={
-              user.profilepic == null
-                ? "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-                : user.profilepic
-            }
-            alt="Profile"
-            className="profile-image"
-          />
-        </button>
+    <div className="products-page">
+      <div className="profile-button-container"></div>
+      <div className="top-section">
+        <div className="search-bar">
+          <input
+            placeholder="Search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          ></input>
+        </div>
+        <div className="logout-orders-container">
+          <button className="logout-button" onClick={Logout}>
+            Logout
+          </button>
+          <button
+            onClick={() => {
+              navigate("/cart");
+            }}
+          >
+            Cart
+          </button>
+          <button
+            className="orders-button"
+            onClick={() => {
+              navigate(`/orders/${id}`);
+            }}
+          >
+            Your Orders
+          </button>
+          <button className="profile-button" onClick={handleProfile}>
+            <img
+              src={
+                user.profilepic == null
+                  ? "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                  : user.profilepic
+              }
+              alt="Profile"
+              className="profile-image"
+            />
+          </button>
+        </div>
       </div>
-      <div style={{ marginTop: "25px" }}>
+      <div className="filter-buttons">
         <button onClick={noFilters}>No filters</button>
         <button onClick={ascP}>Price - Low to High</button>
         <button onClick={descP}>Price - High to Low</button>
@@ -246,29 +201,22 @@ function Product() {
         <button onClick={Shirts}>Shirts</button>
         <button onClick={Formals}>Formals</button>
       </div>
-      <div>
-        <RangeSlider
-          min={0}
-          max={100}
-          step={5}
-          value={value}
-          onChange={setValue}
-        />
-      </div>
-
-      <div className="home_page">
+      <div className="home-page">
         {products.map((product) => (
           <button
-            className="button"
+            className="product-button"
             key={product.isbn}
             onClick={() => {
               navigate(`/product/${product.name}`);
             }}
           >
-            <img src={product.images[0]} alt="Product" />
+            <img
+              src={product.images[0]}
+              alt="Product"
+              className="product-image"
+            />
           </button>
         ))}
-        <button onClick={Logout}>LOGOUT</button>
       </div>
       <ToastContainer />
     </div>
@@ -276,6 +224,3 @@ function Product() {
 }
 
 export default Product;
-/*
-
-*/

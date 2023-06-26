@@ -1,3 +1,79 @@
+.App {
+  text-align: center;
+  margin-top: 20px;
+}
+
 .input-box {
-  padding-top: 30px;
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.btn-grey {
+  background-color: #d2d2d2;
+  color: #000000;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-green {
+  background-color: #000000;
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.button-container {
+  margin-top: 10px;
+}
+
+.done {
+  color: #000000;
+  margin-top: 10px;
+}
+
+.update-password-button,
+.save-button {
+  background-color: #000000;
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+/* Additional Styles for Classy Appearance */
+
+body {
+  background-color: #ffffff;
+}
+
+input,
+button,
+label {
+  color: #000000;
+}
+
+.App {
+  color: #000000;
+}
+
+.update-password-button,
+.save-button {
+  background-color: #000000;
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+/* Add more CSS rules as needed to achieve the desired classy appearance */
+.save-button:disabled {
+  background-color: #999; /* Grey background for disabled button */
+  cursor: not-allowed;
 }

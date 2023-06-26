@@ -17,11 +17,17 @@ function Pass() {
         confirmNew: confirmNew,
       })
       .then(() => {
-        Logout();
+        alert("Password updated!");
+        setOldPassword("");
+        setNewPassword("");
+        setConfirmNew("");
+        navigate(`/products/${id}`);
       })
       .catch(() => {
         alert("Error in updating!");
-        Logout();
+        setOldPassword("");
+        setNewPassword("");
+        setConfirmNew("");
       });
   };
   const Logout = async () => {
@@ -36,33 +42,41 @@ function Pass() {
   };
   return (
     <>
-      <input
-        className="input-box"
-        value={oldPassword}
-        required
-        type="password"
-        onChange={(e) => setOldPassword(e.target.value)}
-      ></input>
-      <input
-        className="input-box"
-        value={newPassword}
-        type="password"
-        required
-        onChange={(e) => setNewPassword(e.target.value)}
-      ></input>
-      <input
-        className="input-box"
-        value={confirmNew}
-        type="password"
-        required
-        onChange={(e) => setConfirmNew(e.target.value)}
-      ></input>
-      <button
-        onClick={handleUpdate}
-        disabled={!(oldPassword != "" && newPassword != "" && confirmNew != "")}
-      >
-        submit
-      </button>
+      <div className="container">
+        <input
+          className="input-box"
+          value={oldPassword}
+          required
+          type="password"
+          placeholder="Old Password"
+          onChange={(e) => setOldPassword(e.target.value)}
+        ></input>
+        <input
+          className="input-box"
+          value={newPassword}
+          type="password"
+          required
+          placeholder="New Password"
+          onChange={(e) => setNewPassword(e.target.value)}
+        ></input>
+        <input
+          className="input-box"
+          value={confirmNew}
+          type="password"
+          required
+          placeholder="Confirm New Password"
+          onChange={(e) => setConfirmNew(e.target.value)}
+        ></input>
+        <button
+          className="submit-button"
+          onClick={handleUpdate}
+          disabled={
+            !(oldPassword !== "" && newPassword !== "" && confirmNew !== "")
+          }
+        >
+          Submit
+        </button>
+      </div>
     </>
   );
 }

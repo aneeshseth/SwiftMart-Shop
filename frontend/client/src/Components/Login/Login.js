@@ -20,13 +20,15 @@ function Login() {
       console.log(err);
     }
   };
+
   const [isLoading, setIsLoading] = useState(true);
+
   const checkRole = async (id) => {
     const res = await axios
       .get(`http://localhost:3600/ecom/role/${id}`)
       .then((data) => {
         if (data.data === "admin") {
-          navigate(`/admin/${id}`);
+          navigate(`/adminscreen/${id}`);
         } else {
           navigate(`/products/${id}`);
         }
@@ -38,13 +40,17 @@ function Login() {
   };
 
   const handleLogin = async () => {
-    try {
-      await login().then((data) => {
-        checkRole(data.id);
-      });
-    } catch (error) {
-      alert("Invalid!");
-      navigate("/login");
+    if (email == "" || password == "") {
+      alert("Enter all fields!");
+    } else {
+      try {
+        await login().then((data) => {
+          checkRole(data.id);
+        });
+      } catch (error) {
+        alert("Invalid!");
+        navigate("/login");
+      }
     }
   };
 
@@ -54,12 +60,14 @@ function Login() {
     }, 1000);
     return () => clearTimeout(timer);
   });
+
   if (isLoading) {
     return (
       <div className="spinner-container">
         <img
-          src="https://media0.giphy.com/media/uGonwW6vqUTI15DKmj/giphy.gif?cid=6c09b952ccb7b2b1e773c3ed04c9cd8d14194335b49b6877&ep=v1_internal_gifs_gifId&rid=giphy.gif&ct=s"
+          src="https://smhfoundation.ca/wp-content/plugins/interactive-3d-flipbook-powered-physics-engine/assets/images/dark-loader.gif"
           className="spinner"
+          alt="Loading..."
         />
       </div>
     );
