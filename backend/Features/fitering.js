@@ -25,8 +25,6 @@ const filteringByAlphabetDESC = (request, response) => {
   });
 };
 
-//Filtering by Price
-
 const filteringByPriceASC = (request, response) => {
   pool.query("SELECT * FROM products ORDER BY price ASC", (err, res) => {
     if (err) {
@@ -38,26 +36,6 @@ const filteringByPriceASC = (request, response) => {
 
 const filteringByPriceDESC = (request, response) => {
   pool.query("SELECT * FROM products ORDER BY price DESC", (err, res) => {
-    if (err) {
-      throw err;
-    }
-    response.status(200).json(res.rows);
-  });
-};
-
-//Filtering by rating
-
-const filteringByRatingASC = (request, response) => {
-  pool.query("SELECT * FROM products ORDER BY rating ASC", (err, res) => {
-    if (err) {
-      throw err;
-    }
-    response.status(200).json(res.rows);
-  });
-};
-
-const filteringByRatingDESC = (request, response) => {
-  pool.query("SELECT * FROM products ORDER BY rating DESC", (err, res) => {
     if (err) {
       throw err;
     }
@@ -81,12 +59,26 @@ const filteringByCategory = (request, response) => {
   );
 };
 
+const filteringByRating = async (request, response) => {
+  const { rows } = await pool.query(
+    "SELECT * FROM REVIEWS ORDER BY RATING DESC"
+  );
+  let products = [];
+  for (const row of rows) {
+    const productResult = await pool.query(
+      "SELECT * FROM PRODUCTS WHERE ID = $1",
+      [row.product_id]
+    );
+    products.push(productResult.rows[0]);
+  }
+  response.send(products);
+};
+
 module.exports = {
   filteringByAlphabetASC,
   filteringByAlphabetDESC,
   filteringByCategory,
   filteringByPriceASC,
   filteringByPriceDESC,
-  filteringByRatingASC,
-  filteringByRatingDESC,
+  filteringByRating,
 };

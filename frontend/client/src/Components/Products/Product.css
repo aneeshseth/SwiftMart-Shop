@@ -21,6 +21,20 @@
   border-radius: 5px;
   font-size: 20px;
 }
+.cart-items-count {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  font-size: 12px;
+}
 
 .logout-orders-container {
   display: flex;
@@ -56,7 +70,7 @@
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 45px;
   margin: 100px;
-  margin-top: 150px;
+  margin-top: 50px;
 }
 
 .home-page img {

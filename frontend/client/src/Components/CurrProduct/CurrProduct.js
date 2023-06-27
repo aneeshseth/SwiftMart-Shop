@@ -72,7 +72,7 @@ function CurrProduct() {
       setProduct(data[0]);
       const timer = setTimeout(() => {
         setIsLoading(false);
-      }, 1000);
+      }, 500);
       return () => clearTimeout(timer);
     });
   }, [id]);
@@ -104,7 +104,7 @@ function CurrProduct() {
     return (
       <div className="spinner-container">
         <img
-          src="https://media0.giphy.com/media/uGonwW6vqUTI15DKmj/giphy.gif?cid=6c09b952ccb7b2b1e773c3ed04c9cd8d14194335b49b6877&ep=v1_internal_gifs_gifId&rid=giphy.gif&ct=s"
+          src="https://smhfoundation.ca/wp-content/plugins/interactive-3d-flipbook-powered-physics-engine/assets/images/dark-loader.gif"
           className="spinner"
         />
       </div>

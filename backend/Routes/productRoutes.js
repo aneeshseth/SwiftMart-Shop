@@ -27,13 +27,13 @@ router.put(
   productController.updateProduct
 );
 router.get("/product/:id", verify, productController.getProductById);
+router.post("/delete/image/:id", verify, productController.deleteImage);
 
 //Filtering routes
 
 router.get("/filter/low", filtering.filteringByPriceASC);
 router.get("/filter/high", filtering.filteringByPriceDESC);
-router.get("/filter/rating/ASC", filtering.filteringByRatingASC);
-router.get("/filter/rating/DESC", filtering.filteringByRatingDESC);
 router.get("/filter/specific", filtering.filteringByCategory);
+router.get("/filter/rating/desc", filtering.filteringByRating);
 
 module.exports = router;

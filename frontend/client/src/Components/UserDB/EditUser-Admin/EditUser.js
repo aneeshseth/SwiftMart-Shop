@@ -140,7 +140,7 @@ function EditUser() {
         onClick={() => {
           handleSave().then(() => {
             alert("User Updated!");
-            navigate("/usersdb");
+            window.location.reload();
           });
         }}
         disabled={formChange()}

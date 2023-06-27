@@ -20,6 +20,34 @@ const getCartItems = (request, response) => {
   );
 };
 
+const getCartCount = (request, response) => {
+  pool.query(
+    "SELECT * FROM USERCART WHERE USER_ID = $1 ORDER BY PRODUCT_ID",
+    [request.user.id],
+    (err, res) => {
+      if (err) {
+        throw err;
+      }
+      response.status(200).json(res.rowCount.toString());
+    }
+  );
+};
+
+const getTotalCartAmount = async (request, response) => {
+  const { rows } = await pool.query(
+    "SELECT * FROM USERCART WHERE USER_ID = $1",
+    [request.user.id]
+  );
+  let amount = 0;
+  for (const row of rows) {
+    const result = await pool.query("SELECT * FROM PRODUCTS WHERE ID = $1", [
+      row.product_id,
+    ]);
+    amount = amount + result.rows[0].price * row.quantity;
+  }
+  response.send(amount.toString());
+};
+
 const getShippingAddress = (request, response) => {
   pool.query(
     "SELECT * FROM ADDRESS WHERE USER_ID = $1",
@@ -121,4 +149,6 @@ module.exports = {
   deleteFromCart,
   getImageForCart,
   getShippingAddress,
+  getCartCount,
+  getTotalCartAmount,
 };

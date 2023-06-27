@@ -12,11 +12,17 @@ const Circle = ({ text }) => (
 function AdminScreen() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [user, setUser] = useState();
+  const [isLoading, setIsLoading] = useState(true);
   const [revenue, setRevenue] = useState("");
   const getTotal = async () => {
     const res = await axios.get("http://localhost:3600/ecom/order/total");
     const data = await res.data;
     return data;
+  };
+
+  const handleProfile = () => {
+    navigate(`/profile/${id}`);
   };
 
   const Logout = async () => {
@@ -39,18 +45,58 @@ function AdminScreen() {
       navigate("/");
     }
   };
+  const getUser = async () => {
+    const res = await axios.get(`http://localhost:3600/ecom/user/${id}`);
+    const data = await res.data;
+    return data;
+  };
 
   useEffect(() => {
     checkRole(id);
     getTotal().then((data) => {
       setRevenue(data);
     });
+    getUser()
+      .then((data) => {
+        if (data.id == null) {
+          Logout();
+        }
+        setUser(data);
+      })
+      .catch(() => {
+        Logout();
+      });
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+    return () => clearTimeout(timer);
   }, []);
+  if (isLoading) {
+    return (
+      <div className="spinner-container">
+        <img
+          src="https://smhfoundation.ca/wp-content/plugins/interactive-3d-flipbook-powered-physics-engine/assets/images/dark-loader.gif"
+          className="spinner"
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="container">
       <button onClick={Logout} className="logout-button">
         Logout
+      </button>
+      <button className="profile-button" onClick={handleProfile}>
+        <img
+          src={
+            user.profilepic == null
+              ? "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+              : user.profilepic
+          }
+          alt="Profile"
+          className="profile-image"
+        />
       </button>
       <div>
         <button

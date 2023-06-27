@@ -20,6 +20,29 @@ const getProductByName = (request, response) => {
   });
 };
 
+const deleteImage = async (request, response) => {
+  const { image } = request.body;
+  const id = request.params.id;
+  pool.query("SELECT * FROM PRODUCTS WHERE ID = $1", [id], (err, res) => {
+    if (err) {
+      throw err;
+    }
+
+    const updatedImages = res.rows[0].images.filter((pic) => pic !== image);
+
+    pool.query(
+      "UPDATE PRODUCTS SET images = $1 WHERE ID = $2",
+      [updatedImages, id],
+      (err, res) => {
+        if (err) {
+          throw err;
+        }
+        response.send("Image deleted");
+      }
+    );
+  });
+};
+
 const getProductById = (request, response) => {
   const id = request.params.id;
   pool.query("SELECT * FROM PRODUCTS WHERE ID = $1", [id], (err, res) => {
@@ -73,14 +96,31 @@ const createProduct = (request, response) => {
 
 const updateProduct = (request, response) => {
   const id = parseInt(request.params.id);
-  const { name, category, price } = request.body;
+  const { name, category, price, images } = request.body;
   pool.query(
-    "UPDATE products SET name = $1, category = $2, price = $3 WHERE id = $4",
-    [name, category, price, id],
-    (err, res) => {
+    "UPDATE products SET name = $1, category = $2, price = $3, images = $4 WHERE id = $5",
+    [name, category, price, images, id],
+    async (err, res) => {
       if (err) {
         throw err;
       }
+      const Product = await stripe.products.create({
+        name: name,
+      });
+      const Price = await stripe.prices.create({
+        unit_amount: price * 100,
+        currency: "USD",
+        product: Product.id,
+      });
+      pool.query(
+        "UPDATE PRODUCTS SET price_id = $1 WHERE ID = $2",
+        [Price.id, id],
+        (err, res) => {
+          if (err) {
+            throw err;
+          }
+        }
+      );
       response.status(200).send(`Product updated with ID: ${id}`);
     }
   );
@@ -103,4 +143,5 @@ module.exports = {
   createProduct,
   getProductByName,
   getProductById,
+  deleteImage,
 };

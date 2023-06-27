@@ -14,7 +14,14 @@ function Product() {
   const [user, setUser] = useState();
   const [message, setMessage] = useState("");
   const [search, setSearch] = useState("");
-
+  const [cartItemsCount, setCartItemsCount] = useState(0);
+  const [TopRatedProducts, setTopRatedProducts] = useState([]);
+  const [filter, setFilter] = useState(false);
+  const getNumberofCartItems = async () => {
+    const res = await axios.get("http://localhost:3600/ecom/cart/count");
+    const data = await res.data;
+    setCartItemsCount(data);
+  };
   const handleVerify = async () => {
     const res = await axios.post("http://localhost:3600/ecom/products", {
       search: search,
@@ -32,18 +39,21 @@ function Product() {
       search: search,
     });
     const data = await res.data;
+    setFilter(false);
     setProducts(data);
   };
 
   const ascP = async () => {
     const res = await axios.get("http://localhost:3600/ecom/filter/low");
     const data = await res.data;
+    setFilter(true);
     setProducts(data);
   };
 
   const descP = async () => {
     const res = await axios.get("http://localhost:3600/ecom/filter/high");
     const data = await res.data;
+    setFilter(true);
     setProducts(data);
   };
 
@@ -55,6 +65,7 @@ function Product() {
       params: { category: "Footwear" },
     });
     const data = await res.data;
+    setFilter(true);
     setProducts(data);
   };
 
@@ -66,6 +77,7 @@ function Product() {
       params: { category: "Shirts" },
     });
     const data = await res.data;
+    setFilter(true);
     setProducts(data);
   };
 
@@ -77,6 +89,7 @@ function Product() {
       params: { category: "Formals" },
     });
     const data = await res.data;
+    setFilter(true);
     setProducts(data);
   };
 
@@ -112,6 +125,8 @@ function Product() {
       .catch(() => {
         Logout();
       });
+    getNumberofCartItems();
+    filterByRating();
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 500);
@@ -133,6 +148,13 @@ function Product() {
       .catch((err) => {
         navigate("/login");
       });
+  };
+  const filterByRating = async () => {
+    const res = await axios.get(
+      "http://localhost:3600/ecom/filter/rating/desc"
+    );
+    const data = await res.data;
+    setTopRatedProducts(data);
   };
 
   const handleProfile = () => {
@@ -172,6 +194,9 @@ function Product() {
           >
             Cart
           </button>
+          {cartItemsCount > 0 && (
+            <span className="cart-items-count">{cartItemsCount}</span>
+          )}
           <button
             className="orders-button"
             onClick={() => {
@@ -201,6 +226,31 @@ function Product() {
         <button onClick={Shirts}>Shirts</button>
         <button onClick={Formals}>Formals</button>
       </div>
+      {search === "" && filter == false ? (
+        <div>
+          <h1 style={{ color: "black" }}>Top Rated Products:</h1>
+          <div className="home-page">
+            {TopRatedProducts.map((product) => (
+              <button
+                className="product-button"
+                key={product.isbn}
+                onClick={() => {
+                  navigate(`/product/${product.name}`);
+                }}
+              >
+                <img
+                  src={product.images[0]}
+                  alt="Product"
+                  className="product-image"
+                />
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div></div>
+      )}
+      <h1 style={{ color: "black" }}>Products Caresoul:</h1>
       <div className="home-page">
         {products.map((product) => (
           <button

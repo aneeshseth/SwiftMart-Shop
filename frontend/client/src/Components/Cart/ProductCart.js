@@ -11,11 +11,18 @@ function ProductCart() {
   const [images, setImages] = useState([]);
   const [address, setAddress] = useState({});
   const [user, setUser] = useState({});
+  const [amount, setAmount] = useState("");
   const handleVerify = async () => {
     const res = await axios.post("http://localhost:3600/ecom/products", {
       search: "",
       withCredentials: true,
     });
+    const data = await res.data;
+    return data;
+  };
+
+  const getTotalCartAmount = async () => {
+    const res = await axios.get("http://localhost:3600/ecom/cart/amt");
     const data = await res.data;
     return data;
   };
@@ -105,6 +112,9 @@ function ProductCart() {
       setUser(data);
     });
     getImages(cartProducts);
+    getTotalCartAmount().then((data) => {
+      setAmount(data);
+    });
   }, []);
 
   const getImages = async (cart) => {
@@ -112,7 +122,6 @@ function ProductCart() {
       name: cart,
     });
     const data = await res.data;
-    console.log(data);
   };
 
   const getUser = async () => {
@@ -175,7 +184,10 @@ function ProductCart() {
             </button>
           </div>
         ))}
+        <div>Total Cost: $ {amount}</div>
         <button
+          className="save-button"
+          disabled={cartProducts.length == 0}
           onClick={async () => {
             handleCheckout(cartProducts).then((data) => {
               window.location.href = data.url;
