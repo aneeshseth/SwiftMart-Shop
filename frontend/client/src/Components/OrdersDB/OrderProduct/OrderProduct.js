@@ -1,10 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import "./OrderProduct.css";
 
 function OrderProduct() {
-  const navigate = useNavigate();
   const [orderDetails, setOrderDetails] = useState({});
   const [productDetails, setProductDetails] = useState({});
   const [userDetails, setUserDetails] = useState({});
@@ -82,32 +81,42 @@ function OrderProduct() {
   };
 
   return (
-    <div>
-      <div>
+    <div className="containerr">
+      <div className="product-details">
         {productDetails.images && productDetails.images.length > 0 && (
-          <img src={productDetails.images[0]} alt="Product" />
+          <img
+            src={productDetails.images[0]}
+            alt="Product"
+            className="product-image"
+          />
         )}
-        <h2>{productDetails.name}</h2>
-        <h2>Shipping Details: *ADDRESS GOES HERE!*</h2>
-        <h3>Quantity: {orderDetails.quantity}</h3>
-        <h3>Amount: $ {productDetails.price * orderDetails.quantity}</h3>
-        <h4>STATUS: {orderDetails.status}</h4>
-        <select className="input-box" value={status} onChange={handleOnChange}>
-          <option value="PROCESSING">Processing</option>
-          <option value="SHIPPED">Shipped</option>
-        </select>
-        <button
-          disabled={handleDisabled()}
-          className="save-button"
-          onClick={() => {
-            handleShipping().then(() => {
-              window.location.reload();
-              alert("Status Updated!");
-            });
-          }}
-        >
-          Save
-        </button>
+        <div className="product-info">
+          <h2>{productDetails.name}</h2>
+          <h2>Shipping Details: *ADDRESS GOES HERE!*</h2>
+          <h3>Quantity: {orderDetails.quantity}</h3>
+          <h3>Amount: $ {productDetails.price * orderDetails.quantity}</h3>
+          <h4>STATUS: {orderDetails.status}</h4>
+          <select
+            className="input-box"
+            value={status}
+            onChange={handleOnChange}
+          >
+            <option value="PROCESSING">Processing</option>
+            <option value="SHIPPED">Shipped</option>
+          </select>
+          <button
+            disabled={handleDisabled()}
+            className="save-button"
+            onClick={() => {
+              handleShipping().then(() => {
+                window.location.reload();
+                alert("Status Updated!");
+              });
+            }}
+          >
+            Save
+          </button>
+        </div>
       </div>
     </div>
   );

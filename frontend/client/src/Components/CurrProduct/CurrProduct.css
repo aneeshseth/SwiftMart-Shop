@@ -1,7 +1,7 @@
 .product-page {
-  background-color: black;
-  color: white;
+  color: black;
   display: flex;
+  flex-wrap: wrap;
 }
 
 .product-page__carousel {
@@ -9,11 +9,15 @@
   display: flex;
   overflow-x: scroll;
   margin-left: 30px;
+  margin-bottom: 20px;
+  margin-top: 50px;
 }
 
 .product-page__details {
   flex: 1;
   padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .product-page__name {
@@ -33,62 +37,27 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.image {
-  height: 600px;
-  margin-left: 10px;
-}
-
-.right-arrow {
-  position: absolute;
-  top: 50%;
-  right: 32px;
-  font-size: 3rem;
-  color: #000;
-  z-index: 10;
-  cursor: pointer;
-  user-select: none;
-}
-
-.left-arrow {
-  position: absolute;
-  top: 50%;
-  left: 32px;
-  font-size: 3rem;
-  color: #000;
-  z-index: 10;
-  cursor: pointer;
-  user-select: none;
-}
-
-.slide {
-  opacity: 0;
-  transition-duration: 1s ease;
-}
-
-.slide.active {
-  opacity: 1;
-  transition-duration: 1s;
-  transform: scale(1.08);
-}
-
-.slider {
-  position: relative;
-  margin-top: 10vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  min-width: 300px;
+  max-width: 800px;
+  margin-right: 10px;
 }
 
 .image {
   border-radius: 10px;
+  width: 100%;
+  height: auto;
 }
 
 .modal {
   font-family: arial;
 }
+.enter-review {
+  margin-top: 25px;
+}
 
+.add-cart {
+  margin-top: 25px;
+}
 .modal {
   position: fixed;
   width: 400px;
@@ -139,6 +108,7 @@
   opacity: 0.7;
   cursor: pointer;
 }
+
 button {
   cursor: pointer;
   font-size: 1rem;
@@ -158,6 +128,7 @@ button {
   color: #fff;
   background-color: #6c757d;
 }
+
 .primary-button {
   color: #fff;
   background-color: #007bff;
@@ -177,7 +148,47 @@ button {
   align-items: center;
   height: 100vh;
 }
+
 .spinner {
   max-width: 100%;
   max-height: 100%;
+}
+
+@media screen and (max-width: 800px) {
+  .product-page__details {
+    padding: 10px;
+  }
+
+  .slider {
+    min-width: 200px;
+    max-width: 600px;
+    margin-right: 10px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .product-page__carousel {
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0 10px;
+  }
+
+  .slider {
+    min-width: 100%;
+    max-width: 100%;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .product-page__details {
+    max-width: 100%;
+  }
+
+  .modal {
+    top: 20%;
+    left: 10%;
+    width: 80%;
+  }
 }

@@ -1,0 +1,85 @@
+.containerr {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.images-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.image-wrapper {
+  position: relative;
+  width: 150px;
+  border-style: solid;
+}
+
+.image-wrapper img {
+  width: 100%;
+  height: auto;
+}
+
+.image-wrapper button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.input-box {
+  border-style: solid;
+  background-color: white;
+}
+.upload-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-grey {
+  background-color: grey;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.btn-green {
+  background-color: green;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.save-button {
+  background-color: blue;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+}
+
+@media (max-width: 800px) {
+  .image-wrapper {
+    width: 120px;
+  }
+}
+
+@media (max-width: 600px) {
+  .image-wrapper {
+    width: 90px;
+  }
+}
+
+@media (max-width: 300px) {
+  .image-wrapper {
+    width: 60px;
+  }
+}

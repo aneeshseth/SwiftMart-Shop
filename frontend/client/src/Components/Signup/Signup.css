@@ -7,7 +7,7 @@
 }
 
 .signup-form {
-  margin-top: 80px;
+  margin-top: 100px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -18,7 +18,6 @@
   height: 100%;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   max-width: 490px;
-  width: 90%;
 }
 
 .logo-container {
@@ -167,7 +166,7 @@ body {
 @media screen and (max-width: 300px) {
   .signup-form {
     padding: 10px;
-    margin-top: 80px;
+    margin-top: 160px;
   }
 
   .signup-heading {

@@ -33,7 +33,7 @@ function CurrProduct() {
   };
 
   const handleSuccess = async () => {
-    if (!isNaN(rating) && review !== "") {
+    if (!isNaN(rating) && review !== "" && rating <= 5) {
       const res = await axios.post(
         `http://localhost:3600/ecom/addrating/${id}`,
         {
@@ -47,8 +47,10 @@ function CurrProduct() {
       setReview("");
       setName("");
       handleClose();
+      window.location.reload();
     } else {
       alert("Invalid input!");
+      handleClose();
     }
   };
 
@@ -84,6 +86,7 @@ function CurrProduct() {
   useEffect(() => {
     getReviews();
   }, []);
+
   useEffect(() => {
     const fetchAverageRating = async () => {
       try {
@@ -106,16 +109,31 @@ function CurrProduct() {
         <img
           src="https://smhfoundation.ca/wp-content/plugins/interactive-3d-flipbook-powered-physics-engine/assets/images/dark-loader.gif"
           className="spinner"
+          alt="Loading spinner"
         />
       </div>
     );
   }
+
   return (
-    <div className="product-page">
+    <div className="product-pagee">
       <div className="product-page__carousel">
         {product.images.map((image, index) => (
-          <div key={index} className={`slider ${index === 0 ? "active" : ""}`}>
-            <img src={image} alt={`Product ${index + 1}`} className="image" />
+          <div
+            key={index}
+            className={`slider ${index === 0 ? "active" : ""}`}
+            style={{
+              minWidth: "300px",
+              maxWidth: "800px",
+              marginRight: "10px",
+            }}
+          >
+            <img
+              src={image}
+              alt={`Product ${index + 1}`}
+              className="image"
+              style={{ width: "100%", height: "auto", borderRadius: "10px" }}
+            />
           </div>
         ))}
       </div>
@@ -126,13 +144,14 @@ function CurrProduct() {
         <p className="product-page__price">${product.price}</p>
         <p className="product-page__isbn">ISBN: {product.isbn}</p>
         <button
+          className="add-cart"
           onClick={() => {
             addToCart(product.id)
               .then(() => {
                 navigate("/cart");
               })
               .catch(() => {
-                alert("Couldnt add to cart!");
+                alert("Couldn't add to cart!");
                 navigate("/products");
               });
           }}
@@ -147,7 +166,7 @@ function CurrProduct() {
         >
           <div>
             <div className="modal-header">
-              <div className="modal-title">Modal Heading</div>
+              <div className="modal-title">Review</div>
               <div>
                 <span className="close-button" onClick={handleClose}>
                   x
@@ -188,18 +207,21 @@ function CurrProduct() {
           </div>
         </Modal>
         <div>
-          <button type="button" onClick={() => setShowModal(true)}>
-            Open Modal
+          <button
+            type="button"
+            className="enter-review"
+            onClick={() => setShowModal(true)}
+          >
+            Enter Review
           </button>
         </div>
-        <p>Click to get the open the Modal</p>
         <div id="reviewContainer">
           <h1>Reviews:</h1>
-          {reviews.length == 0 ? (
-            <div style={{ color: "white" }}>No reviews!</div>
+          {reviews.length === 0 ? (
+            <div style={{ color: "black" }}>No reviews!</div>
           ) : (
             reviews.map((review, index) => (
-              <div key={index} style={{ color: "white" }}>
+              <div key={index} style={{ color: "black" }}>
                 <div>{review.name}</div>
                 <div>{review.review}</div>
                 <div>{review.rating}</div>

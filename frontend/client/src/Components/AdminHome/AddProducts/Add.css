@@ -1,0 +1,58 @@
+.containerr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  margin-top: 55px;
+}
+
+input {
+  margin-bottom: 15px;
+  padding: 15px;
+  width: 300px;
+  border-radius: 10px;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.btn-grey {
+  background-color: grey;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.btn-green {
+  background-color: green;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.done {
+  margin-top: 5px;
+}
+
+@media (max-width: 600px) {
+  input {
+    width: 250px;
+  }
+  .btn-grey {
+    margin-left: 100px;
+  }
+}
+
+.btn-grey {
+  margin-left: 250px;
+}

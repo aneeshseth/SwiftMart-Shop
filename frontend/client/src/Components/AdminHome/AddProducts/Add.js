@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import "./Add.css";
+import React, { useState } from "react";
 import axios from "axios";
+import "./Add.css";
 
 function Add() {
   const [name, setName] = useState("");
@@ -11,7 +11,9 @@ function Add() {
   const [loading, setLoading] = useState(false);
   const [res, setRes] = useState({});
   const [imageUrls, setImageUrls] = useState([]);
+
   const handleSelectFile = (e) => setFile(e.target.files[0]);
+
   const handleUpload = async () => {
     try {
       setLoading(true);
@@ -34,7 +36,7 @@ function Add() {
   };
 
   const handleSubmit = async () => {
-    if (imageUrls.length != 0) {
+    if (imageUrls.length !== 0) {
       const res = await axios.post("http://localhost:3600/ecom/createProduct", {
         name: name,
         category: category,
@@ -45,35 +47,35 @@ function Add() {
       const data = await res.data;
       return data;
     } else {
-      alert("Add Images!");
+      alert("Complete All fields!");
     }
   };
 
   return (
-    <div style={{ color: "white", marginTop: "55px" }}>
+    <div className="containerr">
       <input
         value={name}
         onChange={(e) => setName(e.target.value)}
-        placeholder="name"
+        placeholder="Name"
       />
       <input
         value={category}
         onChange={(e) => setCategory(e.target.value)}
-        placeholder="category"
+        placeholder="Category"
       />
       <input
         value={price}
         onChange={(e) => setPrice(e.target.value)}
-        placeholder="price"
+        placeholder="Price"
       />
       <input
         value={ISBN}
         onChange={(e) => setISBN(e.target.value)}
         placeholder="ISBN"
       />
-      <div className="App">
+      <div className="upload-container">
         <label htmlFor="file" className="btn-grey">
-          select file
+          Select
         </label>
         {file && <center>{file.name}</center>}
         <input
@@ -83,7 +85,6 @@ function Add() {
           onChange={handleSelectFile}
           multiple={false}
         />
-
         {file && (
           <div className="button-container">
             <button onClick={handleUpload} className="btn-green">
@@ -98,15 +99,15 @@ function Add() {
       <button
         onClick={() => {
           handleSubmit().then((data) => {
-            if (data == "ISBN not unique!") {
+            if (data === "ISBN not unique!") {
               alert(data);
-            } else if (data == "Product added!") {
+            } else if (data === "Product added!") {
               alert("Product Added!");
             }
           });
         }}
       >
-        Add product
+        Add Product
       </button>
     </div>
   );

@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import "./EditProducts.css";
 
 function EditProducts() {
   const navigate = useNavigate();
@@ -44,6 +45,7 @@ function EditProducts() {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     const fetchAll = async () => {
       const getProduct = await getProductById();
@@ -54,6 +56,7 @@ function EditProducts() {
     };
     fetchAll();
   }, []);
+
   const checkDisabled = () => {
     if (name === "" && category === "" && price === "" && !uploadSuccess) {
       return true;
@@ -75,6 +78,7 @@ function EditProducts() {
     const data = await res.data;
     return data;
   };
+
   const deleteImage = async (image) => {
     const res = await axios.post(
       `http://localhost:3600/ecom/delete/image/${id}`,
@@ -85,79 +89,80 @@ function EditProducts() {
     const data = await res.data;
     return data;
   };
-  const handleSelectFile = (e) => setFile(e.target.files[0]);
-  return (
-    <div>
-      {product.images &&
-        product.images.length > 0 &&
-        product.images.map((image) => (
-          <>
-            <img src={image} />
-            <button
-              onClick={() => {
-                deleteImage(image).then(() => {
-                  window.location.reload();
-                });
-              }}
-            >
-              Delete Image
-            </button>
-          </>
-        ))}
-      <input
-        value={name}
-        placeholder={product.name}
-        onChange={(e) => setName(e.target.value)}
-      ></input>
-      <input
-        value={category}
-        placeholder={product.category}
-        onChange={(e) => setCategory(e.target.value)}
-      ></input>
-      <input
-        value={price}
-        placeholder={product.price}
-        onChange={(e) => setPrice(e.target.value)}
-      ></input>
-      <button
-        onClick={() => {
-          console.log(product.images.length);
-        }}
-      >
-        check
-      </button>
-      <div className="App">
-        <label htmlFor="file" className="btn-grey">
-          select file
-        </label>
-        {file && <center>{file.name}</center>}
-        <input
-          id="file"
-          type="file"
-          required
-          onChange={handleSelectFile}
-          multiple={false}
-        />
 
-        {file && (
-          <div className="button-container">
-            <button onClick={handleUpload} className="btn-green">
-              {loading ? "Uploading" : "Upload"}
-            </button>
-          </div>
-        )}
+  const handleSelectFile = (e) => setFile(e.target.files[0]);
+
+  return (
+    <div className="containerr">
+      <div className="images-container">
+        {product.images &&
+          product.images.length > 0 &&
+          product.images.map((image, index) => (
+            <div key={index} className="image-wrapper">
+              <img src={image} alt={`Product Image ${index + 1}`} />
+              <button
+                onClick={() => {
+                  deleteImage(image).then(() => {
+                    window.location.reload();
+                  });
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          ))}
       </div>
-      <button
-        className="save-button"
-        disabled={checkDisabled()}
-        onClick={() => {
-          handleSave().then(() => {
-            window.location.reload();
-          });
-        }}
-      >
-        Save
-      </button>
+      <div className="input-container">
+        <input
+          className="input-box"
+          value={name}
+          placeholder={product.name}
+          onChange={(e) => setName(e.target.value)}
+        ></input>
+        <input
+          className="input-box"
+          value={category}
+          placeholder={product.category}
+          onChange={(e) => setCategory(e.target.value)}
+        ></input>
+        <input
+          className="input-box"
+          value={price}
+          placeholder={product.price}
+          onChange={(e) => setPrice(e.target.value)}
+        ></input>
+        <div className="upload-container">
+          <label htmlFor="file" className="btn-grey">
+            Select File
+          </label>
+          {file && <center>{file.name}</center>}
+          <input
+            id="file"
+            type="file"
+            required
+            onChange={handleSelectFile}
+            multiple={false}
+          />
+          {file && (
+            <div className="button-container">
+              <button onClick={handleUpload} className="btn-green">
+                {loading ? "Uploading" : "Upload"}
+              </button>
+            </div>
+          )}
+        </div>
+        <button
+          className="save-button"
+          disabled={checkDisabled()}
+          onClick={() => {
+            handleSave().then(() => {
+              window.location.reload();
+            });
+          }}
+        >
+          Save
+        </button>
+      </div>
     </div>
   );
 }
