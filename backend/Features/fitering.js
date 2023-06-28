@@ -63,7 +63,7 @@ const filteringByRating = async (request, response) => {
     "SELECT * FROM REVIEWS ORDER BY RATING DESC"
   );
   let products = [];
-  const iterations = Math.min(rows.length, 6);
+  const iterations = Math.min(rows.length, 3);
   for (let i = 0; i < iterations; i++) {
     const row = rows[i];
     const productResult = await pool.query(

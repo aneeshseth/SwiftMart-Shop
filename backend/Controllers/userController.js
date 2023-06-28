@@ -116,7 +116,6 @@ const getRole = (request, response) => {
       console.log("error has happened");
       throw err;
     }
-    console.log(res.rows[0]);
     return response.status(200).json(res.rows[0].role);
   });
 };

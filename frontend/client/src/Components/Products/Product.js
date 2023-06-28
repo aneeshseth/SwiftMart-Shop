@@ -238,7 +238,7 @@ function Product() {
       </div>
       {search === "" && filter == false ? (
         <div>
-          <h1 style={{ color: "black" }}>Top Rated Products:</h1>
+          <h1 style={{ color: "black" }}>Top 3 Rated Products:</h1>
           <div className="home-page">
             {TopRatedProducts.map((product) => (
               <button

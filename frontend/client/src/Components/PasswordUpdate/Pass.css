@@ -34,6 +34,15 @@
   cursor: pointer;
 }
 
+.submit-button:disabled {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #969090;
+  color: #fff;
+  border-radius: 5px;
+  cursor: none;
+}
+
 @media screen and (max-width: 800px) {
   .container {
     width: 400px;

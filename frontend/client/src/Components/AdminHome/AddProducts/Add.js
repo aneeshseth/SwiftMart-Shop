@@ -25,6 +25,7 @@ function Add() {
         const response = await axios.post("http://localhost:3600/upload", data);
         setRes(response.data);
         setImageUrls((prevImageUrls) => [...prevImageUrls, response.data.url]);
+        alert("Image Uploaded!");
       } else {
         alert("Please select a PNG, JPG, or JPEG file.");
       }
@@ -90,9 +91,6 @@ function Add() {
             <button onClick={handleUpload} className="btn-green">
               {loading ? "Uploading" : "Upload"}
             </button>
-            <div className="done">
-              {imageUrls.length > 0 ? "Done!" : "No image uploaded"}
-            </div>
           </div>
         )}
       </div>
@@ -103,6 +101,7 @@ function Add() {
               alert(data);
             } else if (data === "Product added!") {
               alert("Product Added!");
+              window.location.reload();
             }
           });
         }}

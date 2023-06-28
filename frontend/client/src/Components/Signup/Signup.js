@@ -119,7 +119,7 @@ function Signup() {
   return (
     <div className="signup-container">
       <a
-        href="https://github.com/aneeshseth/project1"
+        href="https://github.com/aneeshseth/Swift-Mart"
         className="logo-container"
       >
         <img
@@ -130,6 +130,7 @@ function Signup() {
       </a>
       <div className="signup-form">
         <h2 className="signup-heading">Sign up</h2>
+        <div className="credentials">Login Page has access credentials!</div>
         <input
           type="text"
           name="firstName"

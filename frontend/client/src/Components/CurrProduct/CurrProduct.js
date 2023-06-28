@@ -222,9 +222,13 @@ function CurrProduct() {
           ) : (
             reviews.map((review, index) => (
               <div key={index} style={{ color: "black" }}>
-                <div>{review.name}</div>
+                <h4>{review.name}</h4>
                 <div>{review.review}</div>
-                <div>{review.rating}</div>
+                <Rating
+                  name="half-rating"
+                  defaultValue={review.rating}
+                  readOnly
+                />
               </div>
             ))
           )}

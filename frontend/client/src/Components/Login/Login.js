@@ -14,7 +14,7 @@ function Login() {
         emailid: email,
         password: password,
       });
-      const data = res.data;
+      const data = await res.data;
       return data;
     } catch (err) {
       console.log(err);
@@ -34,8 +34,8 @@ function Login() {
         }
       })
       .catch(() => {
-        console.log("hi");
-        navigate("/");
+        alert("login issue");
+        navigate("/login");
       });
   };
 
@@ -77,6 +77,18 @@ function Login() {
     <div className="login-container">
       <div className="login-form">
         <h2 className="login-heading">Login</h2>
+        <div className="credentials">
+          <strong>Admin Email: </strong>aneeshseth2018@gmail.com
+        </div>
+        <div className="credentials">
+          <strong>Admin Password:</strong> doll@2107
+        </div>
+        <div className="credentials">
+          <strong>User Email:</strong> sethprachi3839@gmail.com
+        </div>
+        <div className="credentials last">
+          <strong>User Password: </strong>doll@2107
+        </div>
         <div className="input-group">
           <input
             type="email"
