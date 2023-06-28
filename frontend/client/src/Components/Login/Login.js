@@ -40,7 +40,7 @@ function Login() {
   };
 
   const handleLogin = async () => {
-    if (email == "" || password == "") {
+    if (email === "" || password === "") {
       alert("Enter all fields!");
     } else {
       try {
@@ -59,7 +59,7 @@ function Login() {
       setIsLoading(false);
     }, 1000);
     return () => clearTimeout(timer);
-  });
+  }, []);
 
   if (isLoading) {
     return (

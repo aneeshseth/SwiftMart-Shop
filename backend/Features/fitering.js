@@ -58,13 +58,14 @@ const filteringByCategory = (request, response) => {
     }
   );
 };
-
 const filteringByRating = async (request, response) => {
   const { rows } = await pool.query(
     "SELECT * FROM REVIEWS ORDER BY RATING DESC"
   );
   let products = [];
-  for (const row of rows) {
+  const iterations = Math.min(rows.length, 6);
+  for (let i = 0; i < iterations; i++) {
+    const row = rows[i];
     const productResult = await pool.query(
       "SELECT * FROM PRODUCTS WHERE ID = $1",
       [row.product_id]

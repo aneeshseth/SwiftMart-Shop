@@ -21,10 +21,20 @@
   border-radius: 5px;
   font-size: 20px;
 }
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.spinner {
+  max-width: 100%;
+  max-height: 100%;
+}
 .cart-items-count {
   position: absolute;
-  top: -8px;
-  right: -8px;
+  right: 254px;
+  top: -5px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -80,6 +90,12 @@
   cursor: pointer;
   transition: transform 0.6s ease;
   border-radius: 10px;
+}
+.responsive-button {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
 }
 
 .home-page img:hover {
@@ -140,4 +156,17 @@
 
 .product-image:hover {
   transform: scale(1.07);
+}
+
+.responsive-button {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+}
+
+@media (max-width: 300px) {
+  .responsive-button {
+    font-size: 8px;
+  }
 }

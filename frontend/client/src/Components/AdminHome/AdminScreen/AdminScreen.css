@@ -1,25 +1,26 @@
-.container {
+.containerr {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
   margin: 0 20px;
   min-height: 100vh;
   align-items: center;
-  background-color: black;
 }
 
 .logout-button {
   position: absolute;
   top: 20px;
   right: 20px;
-  background-color: black;
-  color: white;
+  color: black;
   border: none;
   padding: 20px 20px;
   font-size: 16px;
   font-weight: bold;
   border-radius: 5px;
   cursor: pointer;
+}
+.profile-button {
+  margin-top: 20px;
 }
 @keyframes floatAnimation {
   0% {
@@ -55,6 +56,7 @@
   position: relative;
   animation: floatAnimation 5s ease-in-out infinite;
   margin: 20px;
+  border-style: solid;
 }
 
 @media screen and (max-width: 768px) {

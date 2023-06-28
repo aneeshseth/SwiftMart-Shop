@@ -46,7 +46,9 @@ function OrdersDB() {
   return (
     <div className="admin-home">
       <h1>Orders List:</h1>
-      <button onClick={Logout}>Logout</button>
+      <button onClick={Logout} className="logout">
+        Logout
+      </button>
       <div className="table-responsive">
         <table>
           <thead>
@@ -65,11 +67,12 @@ function OrdersDB() {
                 <td>{product.quantity}</td>
                 <th>
                   <button
+                    className="order"
                     onClick={() => {
                       navigate(`/order/${product.id}`);
                     }}
                   >
-                    View Order
+                    View
                   </button>
                   <button
                     onClick={() => {
@@ -78,7 +81,7 @@ function OrdersDB() {
                       });
                     }}
                   >
-                    Cancel Order
+                    Cancel
                   </button>
                 </th>
               </tr>

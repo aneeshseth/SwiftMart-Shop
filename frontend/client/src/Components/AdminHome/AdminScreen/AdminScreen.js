@@ -83,21 +83,20 @@ function AdminScreen() {
   }
 
   return (
-    <div className="container">
-      <button onClick={Logout} className="logout-button">
-        Logout
-      </button>
-      <button className="profile-button" onClick={handleProfile}>
-        <img
-          src={
-            user.profilepic == null
-              ? "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-              : user.profilepic
-          }
-          alt="Profile"
-          className="profile-image"
-        />
-      </button>
+    <div className="containerr">
+      <div>
+        <button className="profile-button" onClick={handleProfile}>
+          <img
+            src={
+              user.profilepic == null
+                ? "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                : user.profilepic
+            }
+            alt="Profile"
+            className="profile-image"
+          />
+        </button>
+      </div>
       <div>
         <button
           onClick={() => {
@@ -123,7 +122,6 @@ function AdminScreen() {
         >
           <Circle text="Orders" />
         </button>
-        <Circle text={"Total Revenue: $" + revenue} />
       </div>
     </div>
   );

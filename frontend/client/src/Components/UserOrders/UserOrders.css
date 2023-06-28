@@ -10,16 +10,11 @@
 }
 
 table {
-  width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
 }
 .button {
-  background-color: black;
-  color: white;
-  cursor: pointer;
-  border-style: solid;
-  padding: 8px;
+  margin-right: 5px;
 }
 th,
 td {
@@ -27,6 +22,7 @@ td {
   text-align: left;
   border-bottom: 1px solid #ddd;
   border-right: 1px solid #ddd;
+  font-size: 16px;
 }
 
 th:last-child,
@@ -34,11 +30,46 @@ td:last-child {
   border-right: none;
 }
 
+.button {
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  border-style: solid;
+  padding: 8px;
+}
+
 @media screen and (max-width: 768px) {
+  .admin-home {
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 500px;
+    color: white;
+  }
+
   th,
   td {
     font-size: 14px;
     padding: 8px;
+    border-right: 1px solid #ddd;
+  }
+
+  th:last-child,
+  td:last-child {
+    border-right: none;
+  }
+}
+
+@media screen and (max-width: 300px) {
+  .admin-home {
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 400px;
+    color: white;
+  }
+  th,
+  td {
+    font-size: 12px;
+    padding: 6px;
     border-right: 1px solid #ddd;
   }
 

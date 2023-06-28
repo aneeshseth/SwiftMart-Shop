@@ -109,7 +109,6 @@ function Product() {
     const query = new URLSearchParams(window.location.search);
     if (query.get("success")) {
       createOrder().then(() => {
-        console.log("hi");
         setMessage("Order placed!");
         alert(message);
         navigate(`/products/${id}`);
@@ -176,7 +175,7 @@ function Product() {
     <div className="products-page">
       <div className="profile-button-container"></div>
       <div className="top-section">
-        <div className="search-bar">
+        <div className="search-bar responsive-search-bar">
           <input
             placeholder="Search"
             value={search}
@@ -184,10 +183,8 @@ function Product() {
           ></input>
         </div>
         <div className="logout-orders-container">
-          <button className="logout-button" onClick={Logout}>
-            Logout
-          </button>
           <button
+            className="responsive-button"
             onClick={() => {
               navigate("/cart");
             }}
@@ -195,16 +192,17 @@ function Product() {
             Cart
           </button>
           {cartItemsCount > 0 && (
-            <span className="cart-items-count">{cartItemsCount}</span>
+            <p className="cart-items-count">{cartItemsCount}</p>
           )}
           <button
-            className="orders-button"
+            className="orders-button responsive-button"
             onClick={() => {
               navigate(`/orders/${id}`);
             }}
           >
-            Your Orders
+            Orders
           </button>
+          <button onClick={Logout}>Logout</button>
           <button className="profile-button" onClick={handleProfile}>
             <img
               src={
@@ -219,12 +217,24 @@ function Product() {
         </div>
       </div>
       <div className="filter-buttons">
-        <button onClick={noFilters}>No filters</button>
-        <button onClick={ascP}>Price - Low to High</button>
-        <button onClick={descP}>Price - High to Low</button>
-        <button onClick={Footwear}>Footwear</button>
-        <button onClick={Shirts}>Shirts</button>
-        <button onClick={Formals}>Formals</button>
+        <button className="responsive-button" onClick={noFilters}>
+          No filters
+        </button>
+        <button className="responsive-button" onClick={ascP}>
+          Low-High
+        </button>
+        <button className="responsive-button" onClick={descP}>
+          High-Low
+        </button>
+        <button className="responsive-button" onClick={Footwear}>
+          Footwear
+        </button>
+        <button className="responsive-button" onClick={Shirts}>
+          Shirts
+        </button>
+        <button className="responsive-button" onClick={Formals}>
+          Formals
+        </button>
       </div>
       {search === "" && filter == false ? (
         <div>

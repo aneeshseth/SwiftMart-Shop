@@ -3,42 +3,38 @@ import "./UserOrders.css";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+
 function UserOrders() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [orders, setOrders] = useState([]);
+
   const getOrders = async () => {
     const res = await axios.get(`http://localhost:3600/ecom/orders/${id}`);
     const data = await res.data;
     return data;
   };
-  const Logout = async () => {
-    try {
-      await axios.get("http://localhost:3600/ecom/logoutUser");
-      navigate("/login");
-    } catch (err) {
-      console.log(err);
-    }
-  };
+
   useEffect(() => {
     getOrders().then((data) => {
       setOrders(data);
     });
-  });
+  }, []);
   const handleDelete = async (id) => {
     const res = await axios.get(`http://localhost:3600/ecom/cancel/${id}`);
     const data = await res.data;
     return data;
   };
+
   const getProductById = async (id) => {
     const res = await axios.get(`http://localhost:3600/ecom/product/${id}`);
     const data = await res.data;
     return data;
   };
+
   return (
     <div className="admin-home">
       <h1>Orders List:</h1>
-      <button onClick={Logout}>Logout</button>
       <div className="table-responsive">
         <table>
           <thead>
@@ -46,6 +42,7 @@ function UserOrders() {
               <th>ORDER ID</th>
               <th>STATUS</th>
               <th>QUANTITY</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -54,15 +51,16 @@ function UserOrders() {
                 <td>{product.id}</td>
                 <td>{product.status}</td>
                 <td>{product.quantity}</td>
-                <th>
+                <td>
                   <button
+                    className="button"
                     onClick={() => {
                       getProductById(product.product_id).then((data) => {
                         navigate(`/product/${data.name}`);
                       });
                     }}
                   >
-                    View Product Ordered
+                    Product
                   </button>
                   <button
                     onClick={() => {
@@ -71,9 +69,9 @@ function UserOrders() {
                       });
                     }}
                   >
-                    Cancel Order
+                    Cancel
                   </button>
-                </th>
+                </td>
               </tr>
             ))}
           </tbody>

@@ -21,7 +21,7 @@ function Pass() {
         setOldPassword("");
         setNewPassword("");
         setConfirmNew("");
-        navigate(`/products/${id}`);
+        window.location.reload();
       })
       .catch(() => {
         alert("Error in updating!");
@@ -41,8 +41,8 @@ function Pass() {
       });
   };
   return (
-    <>
-      <div className="container">
+    <div className="containerr">
+      <div className="profile">
         <input
           className="input-box"
           value={oldPassword}
@@ -77,7 +77,7 @@ function Pass() {
           Submit
         </button>
       </div>
-    </>
+    </div>
   );
 }
 

@@ -16,6 +16,14 @@ function Profile() {
   const [res, setRes] = useState({});
   const [imageUrl, setImageUrl] = useState("");
   const handleSelectFile = (e) => setFile(e.target.files[0]);
+  const Logout = async () => {
+    try {
+      await axios.get("http://localhost:3600/ecom/logoutUser");
+      navigate("/login");
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const handleUpload = async () => {
     try {
       setLoading(true);
@@ -38,7 +46,12 @@ function Profile() {
   };
 
   const formChange = () => {
-    if (firstName == "" && lastName == "" && emailid == "" && imageUrl == "") {
+    if (
+      firstName === "" &&
+      lastName === "" &&
+      emailid === "" &&
+      imageUrl === ""
+    ) {
       return true;
     } else {
       return false;
@@ -54,7 +67,8 @@ function Profile() {
         imageUrl: imageUrl === "" ? user.profilepic : imageUrl,
       })
       .then(() => {
-        navigate(`/products/${id}`);
+        alert("User Updated!");
+        window.location.reload();
       })
       .catch(() => {
         alert("Error in updating!");
@@ -76,73 +90,77 @@ function Profile() {
 
   if (user) {
     return (
-      <>
-        <input
-          className="input-box"
-          placeholder={user.firstname}
-          value={firstName}
-          onChange={(e) => {
-            setFirstName(e.target.value);
-            formChange();
-          }}
-        ></input>
-        <input
-          className="input-box"
-          placeholder={user.lastname}
-          value={lastName}
-          onChange={(e) => {
-            setLastName(e.target.value);
-            formChange();
-          }}
-        ></input>
-        <input
-          className="input-box"
-          placeholder={user.emailid}
-          value={emailid}
-          onChange={(e) => {
-            setEmailId(e.target.value);
-            formChange();
-          }}
-        ></input>
-        <div className="App">
-          <label htmlFor="file" className="btn-grey">
-            select file
-          </label>
-          {file && <center>{file.name}</center>}
+      <div className="containerr">
+        <div className="profile">
           <input
-            id="file"
-            type="file"
-            onChange={handleSelectFile}
-            multiple={false}
-          />
-
-          {file && (
-            <div className="button-container">
-              <button onClick={handleUpload} className="btn-green">
-                {loading ? "Uploading" : "Set Profile Picture"}
-              </button>
-              <div className="done">
-                {imageUrl == "" ? "No image uploaded" : "Done!"}
+            className="input-box"
+            placeholder={user.firstname}
+            value={firstName}
+            onChange={(e) => {
+              setFirstName(e.target.value);
+              formChange();
+            }}
+          ></input>
+          <input
+            className="input-box"
+            placeholder={user.lastname}
+            value={lastName}
+            onChange={(e) => {
+              setLastName(e.target.value);
+              formChange();
+            }}
+          ></input>
+          <input
+            className="input-box"
+            placeholder={user.emailid}
+            value={emailid}
+            onChange={(e) => {
+              setEmailId(e.target.value);
+              formChange();
+            }}
+          ></input>
+          <div className="profile-pic-container">
+            <label htmlFor="file" className="btn-grey">
+              Select File
+            </label>
+            {file && <center>{file.name}</center>}
+            <input
+              id="file"
+              type="file"
+              onChange={handleSelectFile}
+              multiple={false}
+            />
+            {file && (
+              <div className="button-container">
+                <button onClick={handleUpload} className="btn-green">
+                  {loading ? "Uploading" : "Set Profile Picture"}
+                </button>
+                <div className="done">
+                  {imageUrl === "" ? "No image uploaded" : "Done!"}
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
+          <button
+            onClick={() => {
+              navigate(`/pass/${id}`);
+            }}
+            className="update-password-button"
+          >
+            Update Password
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={formChange()}
+            className="save-button"
+          >
+            Save
+          </button>
+          <button onClick={Logout} className="logout-button">
+            Logout
+          </button>
         </div>
-        <button
-          onClick={() => {
-            navigate(`/pass/${id}`);
-          }}
-          className="update-password-button"
-        >
-          Update Password
-        </button>
-        <button
-          onClick={handleSave}
-          disabled={formChange()}
-          className="save-button"
-        >
-          Save
-        </button>
-      </>
+      </div>
     );
   }
 

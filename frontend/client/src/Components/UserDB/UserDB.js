@@ -63,6 +63,7 @@ function UserDB() {
     <div className="admin-home">
       <h1>User/Admin List:</h1>
       <button
+        className="users"
         onClick={() => {
           onlyUsers().then((data) => {
             setUsers(data);
@@ -72,6 +73,7 @@ function UserDB() {
         Only Users List
       </button>
       <button
+        className="filters"
         onClick={() => {
           getUsers();
         }}

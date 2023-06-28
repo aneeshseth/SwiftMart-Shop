@@ -1,32 +1,53 @@
-.container {
+.containerr {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  background-color: #fff; /* White background */
+  align-items: center;
+  background-color: #fff;
 }
-
+.profile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  width: 400px;
+}
 .input-box {
-  width: 300px;
-  padding: 12px;
-  margin-bottom: 12px;
-  border: none;
-  border-radius: 4px;
-  background-color: #f2f2f2; /* Light grey background */
-  color: #000; /* Black text color */
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border-style: solid;
+  width: 200px;
+  margin-bottom: 20px;
 }
 
 .submit-button {
-  width: 300px;
-  padding: 12px;
-  border: none;
-  border-radius: 4px;
-  background-color: #000; /* Black background */
-  color: #fff; /* White text color */
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #000;
+  color: #fff;
+  border-radius: 5px;
   cursor: pointer;
 }
 
-.submit-button:disabled {
-  background-color: #999; /* Grey background for disabled button */
-  cursor: not-allowed;
+@media screen and (max-width: 800px) {
+  .container {
+    width: 400px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    width: 300px;
+  }
+}
+
+@media screen and (max-width: 300px) {
+  .container {
+    width: 200px;
+  }
 }

@@ -12,6 +12,7 @@ function ProductCart() {
   const [address, setAddress] = useState({});
   const [user, setUser] = useState({});
   const [amount, setAmount] = useState("");
+
   const handleVerify = async () => {
     const res = await axios.post("http://localhost:3600/ecom/products", {
       search: "",
@@ -26,6 +27,7 @@ function ProductCart() {
     const data = await res.data;
     return data;
   };
+
   const getCartItems = async () => {
     const res = await axios.get("http://localhost:3600/ecom/cart");
     const data = await res.data;
@@ -46,6 +48,7 @@ function ProductCart() {
     const data = await res.data;
     return data[0];
   };
+
   const Logout = async () => {
     const res = axios
       .get("http://localhost:3600/ecom/logoutUser")
@@ -56,6 +59,7 @@ function ProductCart() {
         navigate("/login");
       });
   };
+
   const handleDecrement = async (id, quantity) => {
     if (quantity - 1 < 1) {
       const res = await axios.get(`http://localhost:3600/ecom/products/${id}`);
@@ -77,6 +81,7 @@ function ProductCart() {
       const dataP = await resP.data;
     }
   };
+
   const handleIncrement = async (id, quantity) => {
     const res = await axios.get(`http://localhost:3600/ecom/products/${id}`);
     const data = await res.data;
@@ -88,6 +93,7 @@ function ProductCart() {
     );
     const dataP = await resP.data;
   };
+
   const handleDelete = async (id) => {
     const res = await axios.get(`http://localhost:3600/ecom/products/${id}`);
     const data = await res.data;
@@ -97,6 +103,7 @@ function ProductCart() {
     const dataP = await resP.data;
     return dataP;
   };
+
   useEffect(() => {
     handleVerify()
       .then(() => {
@@ -140,54 +147,61 @@ function ProductCart() {
     const data = await res.data;
     return data;
   };
+
   return (
     <>
-      <div>
-        <p>FirstName: {user.firstname}</p>
-        <p>LastName: {user.lastname}</p>
+      <div className="shipping-address">
+        <h3>SHIPPING ADDRESS:</h3>
+        <p>First Name: {user.firstname}</p>
+        <p>Last Name: {user.lastname}</p>
         <p>Country: {address.country}</p>
         <p>State: {address.state}</p>
         <p>Street: {address.street}</p>
       </div>
-      <div style={{ color: "black", marginTop: "100px" }}>
-        {Object.keys(dict).map((keY, index) => (
-          <div key={index}>
-            <div>
-              {keY}: {dict[keY]}
+      <div className="cart-items">
+        {Object.keys(dict).map((key, index) => (
+          <div key={index} className="cart-item">
+            <div className="item">
+              <strong>{key}</strong>: {dict[key]}
             </div>
-            <button
-              onClick={() => {
-                handleIncrement(keY, dict[keY]).then(() => {
-                  window.location.reload();
-                });
-              }}
-            >
-              +
-            </button>
-            <button
-              onClick={() => {
-                handleDecrement(keY, dict[keY]).then(() => {
-                  window.location.reload();
-                });
-              }}
-            >
-              -
-            </button>
-            <button
-              onClick={() => {
-                handleDelete(keY).then(() => {
-                  window.location.reload();
-                });
-              }}
-            >
-              Delete
-            </button>
+            <div className="item-buttons">
+              <button
+                className="responsive-button"
+                onClick={() => {
+                  handleIncrement(key, dict[key]).then(() => {
+                    window.location.reload();
+                  });
+                }}
+              >
+                +
+              </button>
+              <button
+                onClick={() => {
+                  handleDecrement(key, dict[key]).then(() => {
+                    window.location.reload();
+                  });
+                }}
+              >
+                -
+              </button>
+              <button
+                onClick={() => {
+                  handleDelete(key).then(() => {
+                    window.location.reload();
+                  });
+                }}
+              >
+                Delete
+              </button>
+            </div>
           </div>
         ))}
-        <div>Total Cost: $ {amount}</div>
+        <div className="total-cost">
+          <p>Total Amount: ${amount}</p>
+        </div>
         <button
-          className="save-button"
-          disabled={cartProducts.length == 0}
+          className="checkout-button"
+          disabled={cartProducts.length === 0}
           onClick={async () => {
             handleCheckout(cartProducts).then((data) => {
               window.location.href = data.url;

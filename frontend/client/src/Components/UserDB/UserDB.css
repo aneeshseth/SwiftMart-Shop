@@ -1,9 +1,9 @@
 .admin-home {
-  margin: 0 auto;
   padding: 20px;
   max-width: 800px;
   color: black;
-  border: 1px solid #ddd;
+  border: 3px solid #ddd;
+  margin-top: 100px;
 }
 
 .table-responsive {
@@ -58,4 +58,13 @@ td:last-child {
   td:last-child {
     border-right: none;
   }
+}
+
+.users {
+  margin-right: 5px;
+  margin-bottom: 15px;
+}
+
+.filters {
+  margin-right: 5px;
 }
