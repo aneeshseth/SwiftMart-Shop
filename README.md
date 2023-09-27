@@ -3,6 +3,18 @@
 
 SwiftMart is an advanced Shopping platform built with Node.js, Express.js, React.js, and PostgreSQL. It provides a seamless shopping experience for users, with features like secure authentication, product filtering, searching, shopping cart functionality, and order management. This README provides an overview of the project.
 
+<img width="1432" alt="image" src="https://github.com/aneeshseth/SwiftMart-Shop/assets/122401851/97c6fd30-38da-42ee-a8bd-a17545eda330">
+<img width="337" alt="image" src="https://github.com/aneeshseth/SwiftMart-Shop/assets/122401851/cb1a96fa-f9d2-4ba8-a27e-89c9c86e28cb">
+<img width="959" alt="image" src="https://github.com/aneeshseth/SwiftMart-Shop/assets/122401851/daaeb5a9-e46b-4225-b46d-932021f358f3">
+<img width="569" alt="image" src="https://github.com/aneeshseth/SwiftMart-Shop/assets/122401851/dbeae7c9-78cd-4294-b715-45531b175bd8">
+<img width="1440" alt="image" src="https://github.com/aneeshseth/SwiftMart-Shop/assets/122401851/775a37d6-02f2-4159-8081-3ef768fc33e9">
+<img width="825" alt="image" src="https://github.com/aneeshseth/SwiftMart-Shop/assets/122401851/557ec228-a141-4abb-a29c-20d333dadbbb">
+<img width="599" alt="image" src="https://github.com/aneeshseth/SwiftMart-Shop/assets/122401851/6ddd6370-39a7-4452-a100-575655f56c4b">
+
+
+
+
+
 ## Features
 
 - **Secure Authentication**: SwiftMart incorporates built-in secure JWT authentication and authorization using cookies, ensuring a safe and personalized experience for users.
